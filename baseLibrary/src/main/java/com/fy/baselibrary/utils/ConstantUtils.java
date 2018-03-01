@@ -37,6 +37,15 @@ public class ConstantUtils {
     public static final String student = "stuInfo";
 
     /**
+     * 学生头像
+     */
+    public static String head_portrait = "";
+
+
+
+
+
+    /**
      * APP 当前模式 （日间/夜间）
      */
     public static final String appMode = "appModeSwitch";
@@ -45,6 +54,7 @@ public class ConstantUtils {
      * 用户是否 第一次打开APP
      */
     public static final String isfirstOpenApp = "userIsFirstOpenApp";
+
 
     /**
      * 普通 状态栏
@@ -81,15 +91,8 @@ public class ConstantUtils {
      */
     public static final int DrawerToolbar = 8;
 
-    /**
-     * 年级编码
-     */
-    public static String ncode = "";
 
-    /**
-     * 学生体质信息 缓存 key
-     */
-    public static final String totalHealthInfoBean = "";
+
 
 
 

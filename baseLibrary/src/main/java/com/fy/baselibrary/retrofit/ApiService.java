@@ -1,5 +1,8 @@
 package com.fy.baselibrary.retrofit;
 
+import com.fy.baselibrary.entity.HomeBean;
+import com.fy.baselibrary.entity.LoginBean;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,10 +11,12 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.QueryMap;
 
 /**
  * 通用的 api接口 </p>
@@ -49,9 +54,23 @@ public interface ApiService {
                                                   @Part("type") RequestBody type,
                                                   @Part List<MultipartBody.Part> files);
 
+
+
+    /**
+     * 登录接口
+     */
     @FormUrlEncoded
     @Headers({"url_name:user"})
     @POST("sys/loginToApp")
-    Observable<BeanModule<String>> loginToApp(@FieldMap Map<String, Object> options);
+    Observable<BeanModule<LoginBean>> loginToApp(@FieldMap Map<String, Object> options);
+
+    /**
+     * 首页信息
+     */
+    @Headers({"url_name:user"})
+    @GET("student/getHome")
+    Observable<BeanModule<HomeBean>> getHome(@QueryMap Map<String, Object> options);
+
+
 
 }

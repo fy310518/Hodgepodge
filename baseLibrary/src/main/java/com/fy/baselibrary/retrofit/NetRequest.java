@@ -3,17 +3,14 @@ package com.fy.baselibrary.retrofit;
 import com.fy.baselibrary.application.BaseApplication;
 import com.fy.baselibrary.statuslayout.RootFrameLayout;
 import com.fy.baselibrary.utils.ConstantUtils;
-import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NetUtils;
 import com.fy.baselibrary.utils.SpfUtils;
 import com.fy.baselibrary.utils.T;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 
 /**
  * 网络请求入口
@@ -71,47 +68,6 @@ public class NetRequest {
                     }
                 })
                 .subscribe(callBack);
-    }
-
-    /**
-     * 使用rxJava2 合并请求
-     * @param fromNetwrok1
-     * @param callBack
-     * @param <V1>
-     * @param <V2>
-     */
-    public <V1, V2> void requestZip(Observable<V1> fromNetwrok1, NetCallBackZip<V1, V2> callBack){
-
-        fromNetwrok1.doOnSubscribe(new Consumer<Disposable>() {
-            @Override
-            public void accept(@NonNull Disposable disposable) throws Exception {
-
-                if (!NetUtils.isConnected(BaseApplication.getApplication())){
-                    T.showShort("似乎没有网络哦!!!");
-                    callBack.updataLayout(RootFrameLayout.LAYOUT_NETWORK_ERROR_ID);
-                    disposable.dispose();
-                } else {
-                    callBack.updataLayout(RootFrameLayout.LAYOUT_CONTENT_ID);
-                }
-            }
-        }).map(new Function<V1, V1>() {
-            @Override
-            public V1 apply(@NonNull V1 result) throws Exception {
-                L.e("net map", result.toString());
-                return result;
-            }
-        }).doOnNext(new Consumer<V1>() {
-            @Override
-            public void accept(V1 result) throws Exception {
-                L.e("net doOnNext", result.toString());
-            }
-        }).flatMap(new Function<V1, ObservableSource<V2>>() {
-            @Override
-            public ObservableSource<V2> apply(V1 v1) throws Exception {
-                L.e("net flatMap", v1.toString());
-                return callBack.zipRequest(v1);
-            }
-        }).subscribe(callBack);
     }
 
 

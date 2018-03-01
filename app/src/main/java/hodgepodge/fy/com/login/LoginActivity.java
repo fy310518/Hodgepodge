@@ -15,16 +15,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.fy.baselibrary.base.BaseActivity;
+import com.fy.baselibrary.entity.HomeBean;
+import com.fy.baselibrary.entity.LoginBean;
+import com.fy.baselibrary.retrofit.NetCallBack;
+import com.fy.baselibrary.retrofit.RxHelper;
+import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.statusbar.MdStatusBarCompat;
+import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.KeyBoardUtils;
 import com.fy.baselibrary.utils.SpfUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hodgepodge.fy.com.R;
 import hodgepodge.fy.com.main.MainActivity;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * 登录
@@ -102,9 +113,7 @@ public class LoginActivity extends BaseActivity {
         super.onClick(view);
         switch (view.getId()) {
             case R.id.tvLogin:
-                Bundle bundle = new Bundle();
-                bundle.putString("大王", "大王叫我来巡山");
-                JumpUtils.jump(mContext, MainActivity.class, bundle);
+                login();
                 break;
             case R.id.iv_account_delete:
                 editUser.setText("");
@@ -115,5 +124,56 @@ public class LoginActivity extends BaseActivity {
                 KeyBoardUtils.openKeyBoard(LoginActivity.this);
                 break;
         }
+    }
+
+    private void login(){
+        IProgressDialog progressDialog = new IProgressDialog().init(mContext)
+                .setDialogMsg(R.string.user_login);
+
+        String mUserName = editUser.getText().toString().trim();
+        String mPassWord = editPass.getText().toString().trim();
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("username", mUserName);
+        param.put("password", mPassWord);
+
+        mConnService.loginToApp(param).compose(RxHelper.handleResult())
+                .flatMap(new Function<LoginBean, ObservableSource<HomeBean>>() {
+                    @Override
+                    public ObservableSource<HomeBean> apply(LoginBean loginBean) throws Exception {
+                        //获取最新的token
+                        ConstantUtils.token = loginBean.getToken();
+                        mCache.put("token", ConstantUtils.token, 14400);//token 超时时间
+
+                        if (null != loginBean.getStudent()) {
+                            //缓存学生信息 和 单独换粗学生id , 单独学生头像
+                            mCache.put(ConstantUtils.student, loginBean.getStudent());
+                            ConstantUtils.studentID = loginBean.getStudent().getStudentid();
+                            ConstantUtils.head_portrait = loginBean.getStudent().getTouxiangurl();
+                            SpfUtils.saveIntToSpf("studentId", ConstantUtils.studentID);
+                            SpfUtils.saveStrToSpf("touxiangurl", ConstantUtils.head_portrait);
+                        }
+
+                        Map<String, Object> homeParam = new HashMap<>();
+                        homeParam.put("token", ConstantUtils.token);
+//                        homeParam.put("studentid", ConstantUtils.studentID);
+                        homeParam.put("studentid", "1");
+                        return mConnService.getHome(homeParam).compose(RxHelper.handleResult());
+                    }
+                })
+                .subscribe(new NetCallBack<HomeBean>(progressDialog) {
+                    @Override
+                    protected void onSuccess(HomeBean t) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("大王", "大王叫我来巡山");
+                        JumpUtils.jump(mContext, MainActivity.class, bundle);
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+
+                    }
+                });
+
     }
 }
