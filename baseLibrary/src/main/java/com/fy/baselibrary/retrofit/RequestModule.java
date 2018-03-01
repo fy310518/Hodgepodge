@@ -38,7 +38,7 @@ public class RequestModule {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(gsonConverterFactory)
-                .baseUrl(Api.BASE_URL)
+                .baseUrl(ApiService.BASE_URL)
                 .client(client)
                 .build()
                 .create(ApiService.class);
@@ -66,9 +66,9 @@ public class RequestModule {
     @Provides
     protected OkHttpClient getClient(HttpLoggingInterceptor interceptor, Interceptor header) {
         return new OkHttpClient.Builder()
-                .connectTimeout(Api.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .readTimeout(Api.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .writeTimeout(Api.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .connectTimeout(ApiService.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .readTimeout(ApiService.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .writeTimeout(ApiService.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .addInterceptor(interceptor)
                 .addInterceptor(header)
                 .build();

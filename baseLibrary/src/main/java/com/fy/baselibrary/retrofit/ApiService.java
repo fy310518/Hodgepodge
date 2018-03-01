@@ -14,10 +14,26 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 /**
- * 通用的的api接口 </p>
+ * 通用的 api接口 </p>
  * Created by fangs on 2017/8/28.
  */
 public interface ApiService {
+
+    /**
+     * 默认的超时时间
+     */
+    int DEFAULT_MILLISECONDS = 60000;
+
+    /**
+     * 服务器地址
+     */
+    String BASE_URL = "http://192.168.100.158:80/";
+
+    /**
+     * 图片 地址 (可选)
+     */
+    String IMG_BASE_URL = BASE_URL + "image";
+
 
     /**
      * 多图片上传

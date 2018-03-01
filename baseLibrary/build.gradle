@@ -51,9 +51,11 @@ dependencies {
     //    dagger2
     compile 'com.google.dagger:dagger:2.4'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
+
     //    rxjava
     compile 'io.reactivex.rxjava2:rxjava:2.1.1'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
     //    retrofit2
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     //    为retrofit添加gson转换器的依赖
@@ -62,6 +64,7 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     //    通过OkHttp中的interceptor来实现实际的底层的请求和响应日志
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+
     //    glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
 
