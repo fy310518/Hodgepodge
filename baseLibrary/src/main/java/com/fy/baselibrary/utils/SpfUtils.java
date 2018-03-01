@@ -38,7 +38,7 @@ public class SpfUtils {
         SharedPreferences.Editor editor = getSpf().edit();
 
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -53,7 +53,7 @@ public class SpfUtils {
     }
 
     /**
-     * 向默认的SharedPreferences文件保存int内容
+     * 向默认的SharedPreferences文件保存int数据
      *
      * @param key   保存的键
      * @param value 保存的内容
@@ -62,7 +62,7 @@ public class SpfUtils {
         SharedPreferences.Editor editor = getSpf().edit();
 
         editor.putInt(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -85,11 +85,11 @@ public class SpfUtils {
         SharedPreferences.Editor editor = getSpf().edit();
 
         editor.putBoolean(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
-     * 从默认的SharedPreferences文件 boolean内容
+     * 从默认的SharedPreferences文件获取 boolean数据
      *
      * @param key
      * @return      没有对应的key 默认返回false
