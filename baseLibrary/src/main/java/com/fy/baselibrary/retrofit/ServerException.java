@@ -1,8 +1,8 @@
 package com.fy.baselibrary.retrofit;
 
 /**
- * Created by Jam on 16-8-12
- * Description:
+ * 自定义 网络请求 异常
+ * Created by fangs on 2017/12/12.
  */
 public class ServerException extends Exception{
 

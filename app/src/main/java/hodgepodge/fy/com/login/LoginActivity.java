@@ -36,6 +36,8 @@ import butterknife.OnClick;
 import hodgepodge.fy.com.R;
 import hodgepodge.fy.com.main.MainActivity;
 import io.reactivex.ObservableSource;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
@@ -141,6 +143,7 @@ public class LoginActivity extends BaseActivity {
 
         mConnService.loginToApp(param)
                 .compose(RxHelper.handleResult())
+                .doOnSubscribe(disposable -> mCompositeDisposable.add(disposable))
                 .flatMap(new Function<LoginBean, ObservableSource<HomeBean>>() {
                     @Override
                     public ObservableSource<HomeBean> apply(LoginBean loginBean) throws Exception {

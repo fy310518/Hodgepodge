@@ -28,6 +28,8 @@ import com.fy.baselibrary.utils.cache.ACache;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 /**
  * Activity 基类，统一处理activity界面样式，多状态视图切换
  * <p/>
@@ -47,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Inject
     protected ApiService mConnService;
+    protected CompositeDisposable mCompositeDisposable;
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -56,6 +59,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         RequestComponent component = DaggerRequestComponent.builder().build();
         component.inJect(this);
+        mCompositeDisposable = new CompositeDisposable();
+
         mCache = ACache.get(this);
         mContext = this;
 
@@ -198,6 +203,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mCompositeDisposable.clear();
     }
 
     public boolean isSaveInstanceState = false;
