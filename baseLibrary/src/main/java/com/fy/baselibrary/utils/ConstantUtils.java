@@ -12,7 +12,7 @@ public class ConstantUtils {
     public static String custom_Url = "";
 
     /**
-     * 区分不同用户的缓存 key
+     * 用户id
      */
     public static String userId = "userid";
 

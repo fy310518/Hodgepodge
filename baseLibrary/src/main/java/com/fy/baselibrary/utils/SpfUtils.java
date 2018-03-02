@@ -3,7 +3,7 @@ package com.fy.baselibrary.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.fy.baselibrary.application.BaseApplication;
+import com.fy.baselibrary.application.BaseApp;
 
 /**
  * SharedPreferences 管理工具类
@@ -22,7 +22,7 @@ public class SpfUtils {
     }
 
     private static SharedPreferences getSpf(){
-        Context ctx = BaseApplication.getApplication();
+        Context ctx = BaseApp.getAppCtx();
         SharedPreferences mSpf = ctx.getSharedPreferences(spfFileName, Context.MODE_PRIVATE);
 
         return mSpf;

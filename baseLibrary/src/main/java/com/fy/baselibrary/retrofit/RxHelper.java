@@ -13,8 +13,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by Jam on 16-6-12
  * Description: Rx 一些巧妙的处理
+ * Created by Jam on 16-6-12
  */
 public class RxHelper {
     /**

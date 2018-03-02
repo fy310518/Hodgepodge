@@ -3,7 +3,7 @@
     package="hodgepodge.fy.com">
 
     <application
-        android:name="com.fy.baselibrary.application.BaseApplication"
+        android:name="com.fy.baselibrary.application.BaseApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

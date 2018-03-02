@@ -6,7 +6,7 @@ import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
 
-import com.fy.baselibrary.application.BaseApplication;
+import com.fy.baselibrary.application.BaseApp;
 
 /**
  * 通过 getResources() 为控件 设置内容
@@ -25,7 +25,7 @@ public class ResourceUtils {
      * @return
      */
     public static float getDimen(int dimenId){
-        return BaseApplication.getApplication().getResources().getDimension(dimenId);
+        return BaseApp.getAppCtx().getResources().getDimension(dimenId);
     }
 
 //    %d   （表示整数）
@@ -38,7 +38,7 @@ public class ResourceUtils {
      * @param replaceStr 将要替换的内容
      */
     public static void setText(TextView tv, int id, String replaceStr){
-        String format = BaseApplication.getApplication().getResources().getString(id);
+        String format = BaseApp.getAppCtx().getResources().getString(id);
         String text = String.format(format, replaceStr);
         tv.setText(text);
     }
@@ -50,7 +50,7 @@ public class ResourceUtils {
      * @param replaceInt 将要替换的内容
      */
     public static void setText(TextView tv, int id, int replaceInt){
-        String format = BaseApplication.getApplication().getResources().getString(id);
+        String format = BaseApp.getAppCtx().getResources().getString(id);
         String text = String.format(format, replaceInt);
         tv.setText(text);
     }
@@ -62,7 +62,7 @@ public class ResourceUtils {
      * @return 替换后的字符串
      */
     public static String getText(int id, String replaceStr){
-        String format = BaseApplication.getApplication().getResources().getString(id);
+        String format = BaseApp.getAppCtx().getResources().getString(id);
 
         return String.format(format, replaceStr);
     }
@@ -74,7 +74,7 @@ public class ResourceUtils {
      * @return 替换后的字符串
      */
     public static String getText(int id, int replaceStr){
-        String format = BaseApplication.getApplication().getResources().getString(id);
+        String format = BaseApp.getAppCtx().getResources().getString(id);
 
         return String.format(format, replaceStr);
     }
@@ -85,7 +85,7 @@ public class ResourceUtils {
      * @return
      */
     public static void setTvColor(TextView tv, int colorId){
-        tv.setTextColor(ContextCompat.getColor(BaseApplication.getApplication(), colorId));
+        tv.setTextColor(ContextCompat.getColor(BaseApp.getAppCtx(), colorId));
     }
 
     /**
@@ -95,7 +95,7 @@ public class ResourceUtils {
      * @param position 设置的位置
      */
     public static void setCompoundDrawable(TextView tv, int id, int position) {
-        Context ctx = BaseApplication.getApplication();
+        Context ctx = BaseApp.getAppCtx();
         Drawable drawable = ContextCompat.getDrawable(ctx, id);
         setTxtIconLocal(tv, drawable, position);
     }
@@ -107,7 +107,7 @@ public class ResourceUtils {
      * @param position
      */
     public static void setCompoundVctDrawable(TextView tv, int id, int position){
-        Context ctx = BaseApplication.getApplication();
+        Context ctx = BaseApp.getAppCtx();
         VectorDrawableCompat vDrawable = VectorDrawableCompat.create(ctx.getResources(),
                 id, ctx.getTheme());
 

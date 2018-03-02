@@ -9,7 +9,7 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 
-import com.fy.baselibrary.application.BaseApplication;
+import com.fy.baselibrary.application.BaseApp;
 
 /**
  * Tint 是 Android5.0 引入的一个属性
@@ -33,7 +33,7 @@ public class TintUtils {
      * @return
      */
     public static Drawable getTintDrawable(@DrawableRes int drawableId, @ColorRes int colorId) {
-        Context ctx = BaseApplication.getApplication();
+        Context ctx = BaseApp.getAppCtx();
         Drawable drawable = ContextCompat.getDrawable(ctx, drawableId);
         int color = ContextCompat.getColor(ctx, colorId);
 

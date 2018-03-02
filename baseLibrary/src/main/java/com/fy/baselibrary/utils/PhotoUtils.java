@@ -15,9 +15,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 
-import com.fy.baselibrary.application.BaseApplication;
+import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.utils.media.MediaScanner;
 
 import java.io.File;
@@ -156,7 +155,7 @@ public class PhotoUtils {
 
         // 其次把文件插入到系统图库
         try {
-            MediaStore.Images.Media.insertImage(BaseApplication.getApplication().getContentResolver(),
+            MediaStore.Images.Media.insertImage(BaseApp.getAppCtx().getContentResolver(),
                     file.getAbsolutePath(), fileName, null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -169,7 +168,7 @@ public class PhotoUtils {
     /**
      * 通知图库更新（4.4之后 使用）
      */
-    public static MediaScannerConnection mediaScanConn = new MediaScannerConnection(BaseApplication.getApplication(),
+    public static MediaScannerConnection mediaScanConn = new MediaScannerConnection(BaseApp.getAppCtx(),
             new MediaScannerConnection.MediaScannerConnectionClient() {
                 @Override
                 public void onScanCompleted(String path, Uri uri) {  //当client和MediaScaner扫描完成后  进行关闭我们的连接
@@ -222,7 +221,7 @@ public class PhotoUtils {
      * @return 获取图像的Bitmap
      */
     public static Bitmap getBitmapFromUri(Uri uri) {
-        Context mContext = BaseApplication.getApplication();
+        Context mContext = BaseApp.getAppCtx();
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
             return bitmap;

@@ -4,8 +4,6 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.text.TextUtils;
 
-import com.fy.baselibrary.application.BaseApplication;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;

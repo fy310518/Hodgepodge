@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.application.BaseApplication;
 import com.fy.baselibrary.base.BaseActivity;
 import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.JumpUtils;

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.fy.baselibrary.application.BaseApplication;
+import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.base.CommonDialog;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.statuslayout.RootFrameLayout;
@@ -72,14 +72,14 @@ public abstract class NetCallBack<V> implements Observer<V> {
     public void onError(Throwable e) {
         L.e("net", "onError()");
         e.printStackTrace();
-        if (!NetUtils.isConnected(BaseApplication.getApplication())) {
+        if (!NetUtils.isConnected(BaseApp.getAppCtx())) {
             actionResponseError("网络不可用");
             updataLayout(RootFrameLayout.LAYOUT_NETWORK_ERROR_ID);
         } else if (e instanceof ServerException) {
             if (e.getMessage().equals("token失效，请重新登录")) {//token 失效 进入登录页面
                 try {
                     Class cla = Class.forName("com.hjy.sports.login.LoginActivity");
-                    Context context = BaseApplication.getApplication();
+                    Context context = BaseApp.getAppCtx();
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("untoken",true);
                     Intent intent = new Intent(context, cla);

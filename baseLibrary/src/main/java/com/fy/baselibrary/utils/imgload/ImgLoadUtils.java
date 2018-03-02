@@ -9,7 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.application.BaseApplication;
+import com.fy.baselibrary.application.BaseApp;
 
 import java.io.File;
 
@@ -36,7 +36,7 @@ public class ImgLoadUtils {
      * @param url
      */
     public static void preloadImg(String url){
-        Context context = BaseApplication.getApplication();
+        Context context = BaseApp.getAppCtx();
         Glide.with(context)
                 .load(url)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -49,7 +49,7 @@ public class ImgLoadUtils {
      * @param imageView
      */
     public static void loadImg(String url, ImageView imageView){
-        Context context = BaseApplication.getApplication();
+        Context context = BaseApp.getAppCtx();
         Glide.with(context)
                 .load(url)
                 .error(R.mipmap.img_load_error)
@@ -78,7 +78,7 @@ public class ImgLoadUtils {
      * @param imageView
      */
     public static void loadImages(String url, ImageView imageView) {
-        Context context = BaseApplication.getApplication();
+        Context context = BaseApp.getAppCtx();
         Glide.with(context)
                 .load(url)
                 .fallback(R.mipmap.img_load_default)
@@ -111,7 +111,7 @@ public class ImgLoadUtils {
      * @param imageView
      */
     public static void loadCircleImg(String url, ImageView imageView) {
-        Context context = BaseApplication.getApplication();
+        Context context = BaseApp.getAppCtx();
         Glide.with(context).load(url)
                 .fallback(R.mipmap.userimg)
                 .placeholder(R.mipmap.img_loading)
@@ -128,7 +128,7 @@ public class ImgLoadUtils {
      * @param imageView
      */
     public static void loadRound(String url, ImageView imageView){
-        Context context = BaseApplication.getApplication();
+        Context context = BaseApp.getAppCtx();
         Glide.with(context).load(url)
                 .fallback(R.mipmap.img_load_default)
                 .placeholder(R.mipmap.img_loading)
@@ -141,7 +141,7 @@ public class ImgLoadUtils {
 
 
     public static void loadRoundImg(int url, ImageView imageView){
-        Context context = BaseApplication.getApplication();
+        Context context = BaseApp.getAppCtx();
         Glide.with(context).load(url)
                 .fallback(R.mipmap.img_load_default)
                 .placeholder(R.mipmap.img_loading)
