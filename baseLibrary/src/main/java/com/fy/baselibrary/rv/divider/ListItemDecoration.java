@@ -1,4 +1,4 @@
-package com.fy.baselibrary.base.rv.divider;
+package com.fy.baselibrary.rv.divider;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -1,4 +1,4 @@
-package com.fy.baselibrary.base.rv.adapter;
+package com.fy.baselibrary.rv.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

@@ -1,4 +1,4 @@
-package com.fy.baselibrary.base.rv.adapter;
+package com.fy.baselibrary.rv.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;
@@ -9,7 +9,7 @@ import java.util.List;
  * RecyclerView多种ItemViewType 的adapter
  * Created by fangs on 2017/7/31.
  */
-public abstract class MultiCommonAdapter<Item> extends RecyclerCommonAdapter<Item> {
+public abstract class MultiCommonAdapter<Item> extends RvCommonAdapter<Item> {
 
     protected MultiTypeSupport<Item> mMultiTypeSupport;
 
@@ -28,7 +28,6 @@ public abstract class MultiCommonAdapter<Item> extends RecyclerCommonAdapter<Ite
 
         int layoutId = mMultiTypeSupport.getLayoutId(viewType);
         ViewHolder holder = ViewHolder.get(mContext, parent, layoutId);
-        initListner(holder);
 
         return holder;
     }

@@ -1,4 +1,4 @@
-package com.fy.baselibrary.base.rv.adapter;
+package com.fy.baselibrary.rv.adapter;
 
 /**
  * RecyclerView多种ItemViewType 需要实现此接口

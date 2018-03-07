@@ -1,4 +1,4 @@
-package com.fy.baselibrary.base.rv.divider;
+package com.fy.baselibrary.rv.divider;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

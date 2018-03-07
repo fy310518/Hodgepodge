@@ -1,4 +1,4 @@
-package com.fy.baselibrary.base.rv.adapter;
+package com.fy.baselibrary.rv.adapter;
 
 /**
  * 自定义 RecycclerView item 点击接口

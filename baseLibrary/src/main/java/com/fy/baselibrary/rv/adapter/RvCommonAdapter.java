@@ -1,10 +1,9 @@
-package com.fy.baselibrary.base.rv.adapter;
+package com.fy.baselibrary.rv.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
  * RecyclerView 通用的Adapter
  * Created by fangs on 2017/7/31.
  */
-public abstract class RecyclerCommonAdapter<Item> extends RecyclerView.Adapter<ViewHolder> {
+public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHolder> {
 
     protected Context mContext;
     protected int mLayoutId;
@@ -23,7 +22,7 @@ public abstract class RecyclerCommonAdapter<Item> extends RecyclerView.Adapter<V
     protected OnItemClickListner itemClickListner;//列表条目点击事件
     protected SparseBooleanArray mSelectedPositions;//保存多选 数据
 
-    public RecyclerCommonAdapter(Context context, int layoutId, List<Item> datas) {
+    public RvCommonAdapter(Context context, int layoutId, List<Item> datas) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mLayoutId = layoutId;
@@ -33,9 +32,19 @@ public abstract class RecyclerCommonAdapter<Item> extends RecyclerView.Adapter<V
     }
 
     @Override
+    public int getItemCount() {
+        return null == mDatas ? 0 : mDatas.size();
+    }
+
+    @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         ViewHolder viewHolder = ViewHolder.get(mContext, parent, mLayoutId);
-        initListner(viewHolder);
+
+//        避免 在onBindViewHolder里面频繁创建事件回调，应该在 onCreateViewHolder()中每次为新建的 View 设置一次即可
+        if (null != itemClickListner){
+            //TODO 待测试 （使用此定义的条目点击回调，需要在 子类的 convert() 最后使用 holder.itemView.setTag(Item)）
+            viewHolder.itemView.setOnClickListener(v -> itemClickListner.onItemClick(v));
+        }
 
         return viewHolder;
     }
@@ -43,11 +52,6 @@ public abstract class RecyclerCommonAdapter<Item> extends RecyclerView.Adapter<V
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         convert(holder, mDatas.get(position), position);
-    }
-
-    @Override
-    public int getItemCount() {
-        return null == mDatas ? 0 : mDatas.size();
     }
 
     /**
@@ -138,17 +142,6 @@ public abstract class RecyclerCommonAdapter<Item> extends RecyclerView.Adapter<V
         }
 
         notifyDataSetChanged();
-    }
-
-    /**
-     * 避免 在onBindViewHolder里面频繁创建事件回调，应该在 onCreateViewHolder()中每次为新建的 View 设置一次即可
-     * @param viewHolder
-     */
-    protected void initListner(ViewHolder viewHolder){
-        if (null != itemClickListner){
-            //TODO 待测试 （使用此定义的条目点击回调，需要在 子类的 convert() 最后使用 holder.itemView.setTag(Item)）
-            viewHolder.itemView.setOnClickListener(v -> itemClickListner.onItemClick(v));
-        }
     }
 
     public List<Item> getmDatas() {
