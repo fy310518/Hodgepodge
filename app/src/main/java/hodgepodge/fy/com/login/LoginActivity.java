@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.fy.baselibrary.base.BaseActivity;
 import com.fy.baselibrary.entity.HomeBean;
 import com.fy.baselibrary.entity.LoginBean;
+import com.fy.baselibrary.entity.NewsBean;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.RxNetCache;
@@ -29,6 +30,7 @@ import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -118,6 +120,7 @@ public class LoginActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.tvLogin:
                 login();
+//                getNews();
                 break;
             case R.id.iv_account_delete:
                 editUser.setText("");
@@ -147,6 +150,11 @@ public class LoginActivity extends BaseActivity {
                 .flatMap(new Function<LoginBean, ObservableSource<HomeBean>>() {
                     @Override
                     public ObservableSource<HomeBean> apply(LoginBean loginBean) throws Exception {
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("大王", "大王叫我来巡山");
+                        JumpUtils.jump(mContext, MainActivity.class, bundle);
+
                         //获取最新的token
                         ConstantUtils.token = loginBean.getToken();
                         mCache.put("token", ConstantUtils.token, 14400);//token 超时时间
@@ -161,17 +169,17 @@ public class LoginActivity extends BaseActivity {
                         }
 
                         Map<String, Object> homeParam = new HashMap<>();
-                        homeParam.put("token", "");
+                        homeParam.put("token", ConstantUtils.token);
                         homeParam.put("studentid", ConstantUtils.studentID);
-                        return mConnService.getHome(homeParam).compose(RxHelper.handleResult());
+                        return mConnService.getHome(homeParam)
+                                .compose(RxHelper.handleResult())
+                                .doOnSubscribe(disposable -> mCompositeDisposable.add(disposable));
                     }
                 })
-                .subscribe(new NetCallBack<HomeBean>(progressDialog) {
+                .subscribe(new NetCallBack<HomeBean>() {
                     @Override
                     protected void onSuccess(HomeBean t) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("大王", "大王叫我来巡山");
-                        JumpUtils.jump(mContext, MainActivity.class, bundle);
+                        editUser.setText("aaaa");
                     }
 
                     @Override
@@ -232,4 +240,23 @@ public class LoginActivity extends BaseActivity {
                 });
     }
 
+    private void getNews(){
+        IProgressDialog progressDialog = new IProgressDialog().init(mContext)
+                .setDialogMsg(R.string.user_login);
+
+        mConnService.getNews()
+                .compose(RxHelper.handleResult())
+                .doOnSubscribe(disposable -> mCompositeDisposable.add(disposable))
+                .subscribe(new NetCallBack<List<NewsBean>>(progressDialog) {
+                    @Override
+                    protected void onSuccess(List<NewsBean> t) {
+                        L.e(t.toString());
+                    }
+
+                    @Override
+                    protected void updataLayout(int flag) {
+                        L.e("net updataLayout", flag + "-----");
+                    }
+                });
+    }
 }

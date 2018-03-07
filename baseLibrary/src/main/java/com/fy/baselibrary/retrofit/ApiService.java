@@ -2,6 +2,7 @@ package com.fy.baselibrary.retrofit;
 
 import com.fy.baselibrary.entity.HomeBean;
 import com.fy.baselibrary.entity.LoginBean;
+import com.fy.baselibrary.entity.NewsBean;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,8 @@ public interface ApiService {
     /**
      * 服务器地址
      */
-    String BASE_URL = "http://192.168.100.158:80/";
+    String BASE_URL = "http://192.168.100.158:80/";    //本地服务器 地址
+//    String BASE_URL = "http://192.168.100.120:8080/";
 
     /**
      * 图片 地址 (可选)
@@ -70,6 +72,14 @@ public interface ApiService {
     @Headers({"url_name:user"})
     @GET("student/getHome")
     Observable<BeanModule<HomeBean>> getHome(@QueryMap Map<String, Object> options);
+
+    /**
+     * 测试 资讯
+     * @return
+     */
+    @Headers({"url_name:user"})
+    @GET("https://api.kmwlyy.com/News")
+    Observable<BeanModule<List<NewsBean>>> getNews();
 
 
 

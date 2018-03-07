@@ -13,8 +13,8 @@ public class BeanModule<T> implements Serializable{
      * rows : {"token":"3011bbfa26bea40ef490d281e7197282"}
      */
 
-    private String msg;
-    private int code;
+    private String msg = "";
+    private int code = -1;
     private T rows;
 
     public String getMsg() {
@@ -46,15 +46,61 @@ public class BeanModule<T> implements Serializable{
      * @return
      */
     public boolean isSuccess(){
-        return code == 0;
+        return code == 0 || Status == 0;
     }
 
     @Override
     public String toString() {
         return "BeanModule{" +
-                "msg='" + msg + '\'' +
+                "msg='" + Msg + '\'' +
                 ", code=" + code +
                 ", rows=" + rows +
                 '}';
+    }
+
+    private int Total;
+    private int Status = -1;
+    private String Msg = "";
+    private boolean Result;
+    private T Data;
+
+    public int getTotal() {
+        return Total;
+    }
+
+    public void setTotal(int total) {
+        Total = total;
+    }
+
+    public String getmMsg() {
+        return Msg;
+    }
+
+    public void setmMsg(String msg) {
+        this.Msg = msg;
+    }
+
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int status) {
+        Status = status;
+    }
+
+    public boolean isResult() {
+        return Result;
+    }
+
+    public void setResult(boolean result) {
+        Result = result;
+    }
+
+    public T getData() {
+        return Data;
+    }
+
+    public void setData(T data) {
+        Data = data;
     }
 }

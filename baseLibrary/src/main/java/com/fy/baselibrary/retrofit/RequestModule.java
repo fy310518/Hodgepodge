@@ -2,6 +2,7 @@ package com.fy.baselibrary.retrofit;
 
 import android.text.TextUtils;
 
+import com.fy.baselibrary.retrofit.gson.DES3GsonConverterFactory;
 import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.L;
 import com.google.gson.GsonBuilder;
@@ -60,6 +61,7 @@ public class RequestModule {
                 .setPrettyPrinting()// 调教格式
                 .disableHtmlEscaping() //默认是GSON把HTML 转义的
                 .create());
+//        return DES3GsonConverterFactory.create();//使用 自定义 GsonConverter
     }
 
     @Singleton
@@ -98,7 +100,7 @@ public class RequestModule {
                 Request request = chain.request()
                         .newBuilder()
                         .addHeader("Content-Type", "multipart/form-data;charse=UTF-8")
-                        .addHeader("Accept-Encoding", "gzip, deflate")
+//                      .addHeader("Accept-Encoding", "gzip, deflate")//根据服务器要求添加（避免重复压缩乱码）
                         .addHeader("Connection", "keep-alive")
                         .addHeader("Accept", "application/json")
                         .addHeader("Cookie", "add cookies here")
