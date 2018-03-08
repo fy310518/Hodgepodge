@@ -1,5 +1,7 @@
 package hodgepodge.fy.com.login;
 
+import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -13,11 +15,13 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fy.baselibrary.base.BaseActivity;
 import com.fy.baselibrary.entity.HomeBean;
 import com.fy.baselibrary.entity.LoginBean;
 import com.fy.baselibrary.entity.NewsBean;
+import com.fy.baselibrary.permission.PermissionActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.RxNetCache;
@@ -28,6 +32,7 @@ import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.KeyBoardUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.SpfUtils;
+import com.fy.baselibrary.utils.T;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +84,12 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
+
+        Intent intent = new Intent(this, PermissionActivity.class);
+        intent.putExtra(PermissionActivity.KEY_PERMISSIONS_ARRAY,
+                new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO});
+
+        startActivityForResult(intent, PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE);
     }
 
     @Override
@@ -258,5 +269,20 @@ public class LoginActivity extends BaseActivity {
                         L.e("net updataLayout", flag + "-----");
                     }
                 });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE) {
+            switch (resultCode) {
+                case PermissionActivity.CALL_BACK_RESULT_CODE_SUCCESS:
+                    T.showLong("权限申请成功！");
+                    break;
+                case PermissionActivity.CALL_BACK_RESULE_CODE_FAILURE:
+                    T.showLong("权限申请失败！");
+                    break;
+            }
+        }
     }
 }

@@ -14,6 +14,11 @@ import java.util.List;
  */
 public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHolder> {
 
+    private final static int TYPE_HEAD = 0;
+    private final static int TYPE_CONTENT = 1;
+    private final static int TYPE_FOOTER = 2;
+
+
     protected Context mContext;
     protected int mLayoutId;
     protected List<Item> mDatas;
@@ -42,7 +47,8 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 
 //        避免 在onBindViewHolder里面频繁创建事件回调，应该在 onCreateViewHolder()中每次为新建的 View 设置一次即可
         if (null != itemClickListner){
-            //TODO 待测试 （使用此定义的条目点击回调，需要在 子类的 convert() 最后使用 holder.itemView.setTag(Item)）
+            //TODO 待测试
+            //（使用此定义的条目点击回调，需要在 子类的 convert() 最后使用 holder.itemView.setTag(Item)）
             viewHolder.itemView.setOnClickListener(v -> itemClickListner.onItemClick(v));
         }
 

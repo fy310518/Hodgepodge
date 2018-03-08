@@ -32,7 +32,8 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
      * 构造分割线
      *
      * @param context
-     * @param space   设置间隔（如果参数不为 0，则表示 只设置间隔；为 0，则表示按系统配置的 listDivider 设置间隔，和绘制分割线）单位是dp;
+     * @param space   设置间隔（如果参数不为 0，则表示 只设置间隔；为 0，
+     *                则表示按系统配置的 listDivider 设置间隔，和绘制分割线）单位是dp;
      */
     public ListItemDecoration(Context context, int space) {
 
