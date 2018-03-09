@@ -130,7 +130,10 @@ public class LoginActivity extends BaseActivity {
         super.onClick(view);
         switch (view.getId()) {
             case R.id.tvLogin:
-                login();
+                Bundle bundle = new Bundle();
+                bundle.putString("大王", "大王叫我来巡山");
+                JumpUtils.jump(mContext, MainActivity.class, bundle);
+//                login();
 //                getNews();
                 break;
             case R.id.iv_account_delete:

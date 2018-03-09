@@ -19,16 +19,21 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     private View mConvertView;
     private Context mContext;
 
-    public ViewHolder(Context context, View itemView, ViewGroup parent) {
+    public ViewHolder(Context context, View itemView) {
         super(itemView);
         mContext = context;
         mConvertView = itemView;
         mViews = new SparseArray<>();
     }
 
-    public static ViewHolder get(Context context, ViewGroup parent, int layoutId) {
+    public static ViewHolder createViewHolder(Context context, View itemView) {
+        ViewHolder holder = new ViewHolder(context, itemView);
+        return holder;
+    }
+
+    public static ViewHolder createViewHolder(Context context, ViewGroup parent, int layoutId) {
         View itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
-        ViewHolder holder = new ViewHolder(context, itemView, parent);
+        ViewHolder holder = new ViewHolder(context, itemView);
         return holder;
     }
 

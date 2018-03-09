@@ -43,7 +43,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = ViewHolder.get(mContext, parent, mLayoutId);
+        ViewHolder viewHolder = ViewHolder.createViewHolder(mContext, parent, mLayoutId);
 
 //        避免 在onBindViewHolder里面频繁创建事件回调，应该在 onCreateViewHolder()中每次为新建的 View 设置一次即可
         if (null != itemClickListner){
