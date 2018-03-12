@@ -22,5 +22,7 @@ public class DemoAdapter extends RvCommonAdapter<String>{
     @Override
     public void convert(ViewHolder holder, String t, int position) {
         holder.setText(R.id.txtDemo, t);
+
+
     }
 }

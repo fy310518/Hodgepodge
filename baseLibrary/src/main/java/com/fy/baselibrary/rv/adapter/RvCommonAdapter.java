@@ -47,8 +47,7 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
 
 //        避免 在onBindViewHolder里面频繁创建事件回调，应该在 onCreateViewHolder()中每次为新建的 View 设置一次即可
         if (null != itemClickListner){
-            //TODO 待测试
-            //（使用此定义的条目点击回调，需要在 子类的 convert() 最后使用 holder.itemView.setTag(Item)）
+            //需要在 convert() 最后使用 holder.itemView.setTag(Item)
             viewHolder.itemView.setOnClickListener(v -> itemClickListner.onItemClick(v));
         }
 
@@ -58,6 +57,9 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         convert(holder, mDatas.get(position), position);
+
+        //设置 tag 对应 onCreateViewHolder() 设置点击事件
+        holder.itemView.setTag(getmDatas().get(position));
     }
 
     /**
@@ -68,15 +70,6 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
     public abstract void convert(ViewHolder holder, Item t, int position);
 
 
-
-
-    public void setItemClickListner(OnItemClickListner itemClickListner) {
-        this.itemClickListner = itemClickListner;
-    }
-
-    public void setmDatas(List<Item> mDatas) {
-        this.mDatas = mDatas;
-    }
 
     /**
      * 添加data，从指定location中加入
@@ -150,11 +143,19 @@ public abstract class RvCommonAdapter<Item> extends RecyclerView.Adapter<ViewHol
         notifyDataSetChanged();
     }
 
+    public void setmDatas(List<Item> mDatas) {
+        this.mDatas = mDatas;
+    }
+
     public List<Item> getmDatas() {
         return this.mDatas;
     }
 
     public SparseBooleanArray getmSelectedPositions() {
         return mSelectedPositions;
+    }
+
+    public void setItemClickListner(OnItemClickListner itemClickListner) {
+        this.itemClickListner = itemClickListner;
     }
 }

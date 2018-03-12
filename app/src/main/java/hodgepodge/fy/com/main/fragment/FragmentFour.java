@@ -2,11 +2,11 @@ package hodgepodge.fy.com.main.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.TextView;
 
 import com.fy.baselibrary.base.BaseFragment;
 import com.fy.baselibrary.rv.adapter.HeaderAndFooterWrapper;
+import com.fy.baselibrary.rv.anim.FadeItemAnimator;
 import com.fy.baselibrary.rv.divider.ListItemDecoration;
 
 import java.util.ArrayList;
@@ -28,6 +28,7 @@ public class FragmentFour extends BaseFragment {
 
     @BindView(R.id.rvDemo)
     RecyclerView rvDemo;
+    DemoAdapter adapter;
     HeaderAndFooterWrapper headerAdapter;
 
     @Override
@@ -40,23 +41,23 @@ public class FragmentFour extends BaseFragment {
 
         initRv();
 
-        Observable.timer(2000, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        List<String> data = new ArrayList<>();
-                        for (int i = 40; i < 50; i++){
-                            data.add("***" + i);
-                        }
-
-                        DemoAdapter adapter = (DemoAdapter) headerAdapter.getmInnerAdapter();
-                        adapter.addData(data);
-                        headerAdapter.notifyDataSetChanged();
-
-                    }
-                });
+//        Observable.timer(2000, TimeUnit.MILLISECONDS)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<Long>() {
+//                    @Override
+//                    public void accept(Long aLong) throws Exception {
+//                        List<String> data = new ArrayList<>();
+//                        for (int i = 40; i < 50; i++){
+//                            data.add("***" + i);
+//                        }
+//
+//                        DemoAdapter adapter = (DemoAdapter) headerAdapter.getmInnerAdapter();
+//                        adapter.addData(data);
+//                        headerAdapter.notifyDataSetChanged();
+//
+//                    }
+//                });
     }
 
 
@@ -66,17 +67,25 @@ public class FragmentFour extends BaseFragment {
             data.add("---" + i);
         }
 
-        DemoAdapter adapter = new DemoAdapter(mContext, data);
+        adapter = new DemoAdapter(mContext, data);
+        adapter.setItemClickListner(view -> {
+            String item = (String) view.getTag();
+            int position = adapter.getmDatas().indexOf(item);
+
+            adapter.addData(position, "大王");
+            adapter.notifyItemInserted(position);
+        });
         rvDemo.setLayoutManager(new LinearLayoutManager(mContext));
         rvDemo.addItemDecoration(new ListItemDecoration(mContext, 0));
+        rvDemo.setItemAnimator(new FadeItemAnimator());
 
-        headerAdapter = new HeaderAndFooterWrapper(adapter);
-        TextView t1 = new TextView(mContext);
+//        headerAdapter = new HeaderAndFooterWrapper(adapter);
+//        TextView t1 = new TextView(mContext);
+//
+//        t1.setText("Header 1---");
+//        headerAdapter.addHeaderView(t1);
 
-        t1.setText("Header 1---");
-        headerAdapter.addHeaderView(t1);
-
-        rvDemo.setAdapter(headerAdapter);
+        rvDemo.setAdapter(adapter);
     }
 
 
