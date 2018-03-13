@@ -1,8 +1,10 @@
-package com.fy.baselibrary.retrofit;
+package hodgepodge.fy.com.api;
 
-import com.fy.baselibrary.entity.HomeBean;
-import com.fy.baselibrary.entity.LoginBean;
-import com.fy.baselibrary.entity.NewsBean;
+import com.fy.baselibrary.retrofit.BeanModule;
+
+import hodgepodge.fy.com.entity.HomeBean;
+import hodgepodge.fy.com.entity.LoginBean;
+import hodgepodge.fy.com.entity.NewsBean;
 
 import java.util.List;
 import java.util.Map;
@@ -24,23 +26,6 @@ import retrofit2.http.QueryMap;
  * Created by fangs on 2017/8/28.
  */
 public interface ApiService {
-
-    /**
-     * 默认的超时时间
-     */
-    int DEFAULT_MILLISECONDS = 60000;
-
-    /**
-     * 服务器地址
-     */
-    String BASE_URL = "http://192.168.100.158:80/";    //本地服务器 地址
-//    String BASE_URL = "http://192.168.100.120:8080/";
-
-    /**
-     * 图片 地址 (可选)
-     */
-    String IMG_BASE_URL = BASE_URL + "image";
-
 
     /**
      * 多图片上传

@@ -34,15 +34,14 @@ public class RequestModule {
 
     @Singleton
     @Provides
-    protected ApiService getService(RxJava2CallAdapterFactory callAdapterFactory, GsonConverterFactory
+    protected Retrofit getService(RxJava2CallAdapterFactory callAdapterFactory, GsonConverterFactory
             gsonConverterFactory, OkHttpClient client) {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(gsonConverterFactory)
-                .baseUrl(ApiService.BASE_URL)
+                .baseUrl(ConstantUtils.BASE_URL)
                 .client(client)
-                .build()
-                .create(ApiService.class);
+                .build();
     }
 
     @Singleton
@@ -68,9 +67,9 @@ public class RequestModule {
     @Provides
     protected OkHttpClient getClient(HttpLoggingInterceptor interceptor, Interceptor header) {
         return new OkHttpClient.Builder()
-                .connectTimeout(ApiService.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .readTimeout(ApiService.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .writeTimeout(ApiService.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .connectTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .readTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .writeTimeout(ConstantUtils.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .addInterceptor(interceptor)
                 .addInterceptor(header)
                 .build();

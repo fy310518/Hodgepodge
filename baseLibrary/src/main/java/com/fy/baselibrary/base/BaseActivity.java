@@ -7,28 +7,19 @@ import android.support.v7.app.AppCompatDelegate;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fy.baselibrary.R;
-import com.fy.baselibrary.retrofit.ApiService;
-import com.fy.baselibrary.retrofit.DaggerRequestComponent;
-import com.fy.baselibrary.retrofit.RequestComponent;
 import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.MdStatusBarCompat;
 import com.fy.baselibrary.statuslayout.OnRetryListener;
 import com.fy.baselibrary.statuslayout.OnShowHideViewListener;
 import com.fy.baselibrary.statuslayout.RootFrameLayout;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
-import com.fy.baselibrary.utils.FileUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.T;
 import com.fy.baselibrary.utils.cache.ACache;
-
-import javax.inject.Inject;
-
-import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Activity 基类，统一处理activity界面样式，多状态视图切换
@@ -47,19 +38,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected TextView tvBack;
     protected TextView tvMenu;
 
-    @Inject
-    protected ApiService mConnService;
-    protected CompositeDisposable mCompositeDisposable;
-
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        RequestComponent component = DaggerRequestComponent.builder().build();
-        component.inJect(this);
-        mCompositeDisposable = new CompositeDisposable();
 
         mCache = ACache.get(this);
         mContext = this;
@@ -200,11 +184,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         isSaveInstanceState = false;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mCompositeDisposable.clear();
-    }
 
     public boolean isSaveInstanceState = false;
     @Override

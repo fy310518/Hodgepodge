@@ -4,22 +4,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fy.baselibrary.retrofit.ApiService;
-import com.fy.baselibrary.retrofit.DaggerRequestComponent;
-import com.fy.baselibrary.retrofit.RequestComponent;
 import com.fy.baselibrary.utils.cache.ACache;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Fragment 基类
@@ -33,10 +26,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected View mRootView;
     protected Unbinder unbinder;
 
-    @Inject
-    protected ApiService mConnService;
-    protected CompositeDisposable mCompositeDisposable;
-
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
@@ -44,9 +33,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        RequestComponent component = DaggerRequestComponent.builder().build();
-        component.inJect(this);
-        mCompositeDisposable = new CompositeDisposable();
 
         this.mContext = (BaseActivity) context;
         mCache = ACache.get(mContext);
@@ -81,7 +67,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCompositeDisposable.clear();
         if (null != unbinder){
             unbinder.unbind();
         }

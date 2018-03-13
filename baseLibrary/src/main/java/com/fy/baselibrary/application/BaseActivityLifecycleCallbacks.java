@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.utils.L;
 
 import butterknife.ButterKnife;
@@ -60,6 +61,7 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     public void onActivityStopped(Activity activity) {
         L.d(TAG, "Stop()");
 
+        RequestUtils.clearDispos();
     }
 
     @Override

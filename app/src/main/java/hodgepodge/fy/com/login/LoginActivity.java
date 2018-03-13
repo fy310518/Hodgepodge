@@ -15,14 +15,16 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fy.baselibrary.base.BaseActivity;
-import com.fy.baselibrary.entity.HomeBean;
-import com.fy.baselibrary.entity.LoginBean;
-import com.fy.baselibrary.entity.NewsBean;
+
+import hodgepodge.fy.com.api.ApiService;
+import hodgepodge.fy.com.entity.HomeBean;
+import hodgepodge.fy.com.entity.LoginBean;
+import hodgepodge.fy.com.entity.NewsBean;
 import com.fy.baselibrary.permission.PermissionActivity;
 import com.fy.baselibrary.retrofit.NetCallBack;
+import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.RxNetCache;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
@@ -43,9 +45,6 @@ import butterknife.OnClick;
 import hodgepodge.fy.com.R;
 import hodgepodge.fy.com.main.MainActivity;
 import io.reactivex.ObservableSource;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 /**
@@ -158,9 +157,10 @@ public class LoginActivity extends BaseActivity {
         param.put("username", mUserName);
         param.put("password", mPassWord);
 
-        mConnService.loginToApp(param)
+        RequestUtils.create(ApiService.class)
+                .loginToApp(param)
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(disposable -> mCompositeDisposable.add(disposable))
+                .doOnSubscribe(disposable -> RequestUtils.addDispos(disposable))
                 .flatMap(new Function<LoginBean, ObservableSource<HomeBean>>() {
                     @Override
                     public ObservableSource<HomeBean> apply(LoginBean loginBean) throws Exception {
@@ -185,12 +185,14 @@ public class LoginActivity extends BaseActivity {
                         Map<String, Object> homeParam = new HashMap<>();
                         homeParam.put("token", ConstantUtils.token);
                         homeParam.put("studentid", ConstantUtils.studentID);
-                        return mConnService.getHome(homeParam)
+                        return RequestUtils
+                                .create(ApiService.class)
+                                .getHome(homeParam)
                                 .compose(RxHelper.handleResult())
-                                .doOnSubscribe(disposable -> mCompositeDisposable.add(disposable));
+                                .doOnSubscribe(disposable -> RequestUtils.addDispos(disposable));
                     }
                 })
-                .subscribe(new NetCallBack<HomeBean>() {
+                .subscribe(new NetCallBack<HomeBean>(progressDialog) {
                     @Override
                     protected void onSuccess(HomeBean t) {
                         editUser.setText("aaaa");
@@ -215,7 +217,10 @@ public class LoginActivity extends BaseActivity {
         param.put("password", mPassWord);
 
         new RxNetCache.Builder().setApi("loginToApp").create()
-                .request(mConnService.loginToApp(param).compose(RxHelper.handleResult()))
+                .request(RequestUtils
+                        .create(ApiService.class)
+                        .loginToApp(param)
+                        .compose(RxHelper.handleResult()))
                 .flatMap(new Function<LoginBean, ObservableSource<HomeBean>>() {
                     @Override
                     public ObservableSource<HomeBean> apply(LoginBean loginBean) throws Exception {
@@ -236,7 +241,9 @@ public class LoginActivity extends BaseActivity {
                         homeParam.put("token", ConstantUtils.token);
 //                        homeParam.put("studentid", ConstantUtils.studentID);
                         homeParam.put("studentid", "1");
-                        return mConnService.getHome(homeParam).compose(RxHelper.handleResult());
+                        return RequestUtils.create(ApiService.class)
+                                .getHome(homeParam)
+                                .compose(RxHelper.handleResult());
                     }
                 })
                 .subscribe(new NetCallBack<HomeBean>(progressDialog) {
@@ -258,9 +265,10 @@ public class LoginActivity extends BaseActivity {
         IProgressDialog progressDialog = new IProgressDialog().init(mContext)
                 .setDialogMsg(R.string.user_login);
 
-        mConnService.getNews()
+        RequestUtils.create(ApiService.class)
+                .getNews()
                 .compose(RxHelper.handleResult())
-                .doOnSubscribe(disposable -> mCompositeDisposable.add(disposable))
+                .doOnSubscribe(RequestUtils::addDispos)
                 .subscribe(new NetCallBack<List<NewsBean>>(progressDialog) {
                     @Override
                     protected void onSuccess(List<NewsBean> t) {

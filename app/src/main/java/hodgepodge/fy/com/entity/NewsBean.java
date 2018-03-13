@@ -1,4 +1,4 @@
-package com.fy.baselibrary.entity;
+package hodgepodge.fy.com.entity;
 
 /**
  * Created by Administrator on 2018/3/6.

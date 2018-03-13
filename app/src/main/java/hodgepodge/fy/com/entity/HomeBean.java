@@ -1,4 +1,4 @@
-package com.fy.baselibrary.entity;
+package hodgepodge.fy.com.entity;
 
 import java.io.Serializable;
 
