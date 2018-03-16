@@ -31,4 +31,5 @@ public class BaseActivityBean implements Serializable {
     public void setOrientoinListener(BaseOrientoinListener orientoinListener) {
         this.orientoinListener = orientoinListener;
     }
+
 }

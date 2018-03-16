@@ -8,41 +8,28 @@
         <item name="colorPrimary">#1398fc</item>    <!-- 状态栏 -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- toolbar -->
         <item name="colorAccent">@color/colorAccent</item>  <!-- 重点 -->
-        <!-- 不显示标题栏 -->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+
+        <item name="windowActionBar">false</item><!-- 不显示标题栏 -->
+        <item name="windowNoTitle">true</item><!-- 无标题 -->
+        <item name="android:windowBackground">@null</item><!-- 背景 -->
+
+        <!-- 系统分割线 -->
+        <item name="android:listDivider">@drawable/divider_bg</item>
+
+        <item name="android:textAllCaps">false</item><!-- 所有字母是否大写 -->
+    </style>
+
+
+    <!-- 启动界面 权限管理界面 主题 -->
+    <style name="myTransparent" parent="BaseAppTheme">
+        <item name="android:colorBackgroundCacheHint">@null</item><!-- 背景缓存颜色 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
 
         <!-- 避免启动应用后，出现短暂的黑屏或白屏现象 -->
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
-
-        <item name="android:windowBackground">@null</item>
-
-        <!-- 系统分割线 -->
-        <item name="android:listDivider">@drawable/divider_bg</item>
     </style>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="BaseAppTheme">
-        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
-    </style>
-
-    
-    <style name="myTransparent" parent="AppTheme">
-        <item name="android:windowBackground">@color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
-
-    <!-- 权限管理 主题 -->
-    <style name="NoTitleTranslucentTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
 
     <!-- dialog 样式 -->
     <style name="commonDialog" parent="@android:style/Theme.Dialog">

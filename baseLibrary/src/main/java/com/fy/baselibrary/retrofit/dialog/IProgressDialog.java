@@ -1,6 +1,7 @@
 package com.fy.baselibrary.retrofit.dialog;
 
-import com.fy.baselibrary.base.BaseActivity;
+import android.support.v7.app.AppCompatActivity;
+
 import com.fy.baselibrary.base.CommonDialog;
 
 /**
@@ -9,10 +10,10 @@ import com.fy.baselibrary.base.CommonDialog;
  */
 public class IProgressDialog {
 
-    BaseActivity mContext;
+    AppCompatActivity mContext;
     CommonDialog dialog;
 
-    public IProgressDialog init(BaseActivity mContext) {
+    public IProgressDialog init(AppCompatActivity mContext) {
         this.mContext = mContext;
 
         return this;
@@ -52,7 +53,7 @@ public class IProgressDialog {
 
     /** 关闭对话框 */
     public void close() {
-        if (null != dialog && null != mContext && !mContext.isSaveInstanceState) {
+        if (null != dialog && null != mContext) {
             dialog.dismiss();
         }
     }

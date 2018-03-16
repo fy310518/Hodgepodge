@@ -9,7 +9,7 @@
         <!-- 全局 权限管理 -->
         <activity
             android:name=".permission.PermissionActivity"
-            android:theme="@style/NoTitleTranslucentTheme" />
+            android:theme="@style/myTransparent" />
 
     </application>
 </manifest>

@@ -1,5 +1,6 @@
 package com.fy.baselibrary.permission;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,17 +13,21 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.fy.baselibrary.R;
+import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.statusbar.MdStatusBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * http://kcrason.com/2017/08/23/android6.0-permissions/
- * Created by KCrason on 2017/8/17.
+ * TODO 需要优化 比如 询问框
+ * https://github.com/KCrason/PermissionGranted
+ * Created by github on 2017/8/17.
  */
-public class PermissionActivity extends AppCompatActivity {
+public class PermissionActivity extends AppCompatActivity implements IBaseActivity{
 
     private final static int PERMISSION_REQUEST_CODE = 0x01;
 
@@ -56,10 +61,23 @@ public class PermissionActivity extends AppCompatActivity {
      */
     private String mAlwaysRefuseMessage;
 
+    @Override
+    public boolean isShowHeadView() {
+        return false;
+    }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int setView() {
+        return 0;
+    }
+
+    @Override
+    public void setStatusBar(Activity activity) {
+        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent);
+    }
+
+    @Override
+    public void initData(Activity activity, Bundle savedInstanceState) {
         mFirstRefuseMessage = getString(R.string.defaule_always_message);
         if (getIntent() != null) {
             mPermissions = getIntent().getStringArrayExtra(KEY_PERMISSIONS_ARRAY);
@@ -75,6 +93,13 @@ public class PermissionActivity extends AppCompatActivity {
         checkPermission(mPermissions);
     }
 
+    @Override
+    public void onClick(View v) {}
+
+    @Override
+    public void reTry() {
+
+    }
 
     /**
      * 请求多个权限
@@ -160,20 +185,9 @@ public class PermissionActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(isAlwaysRefuse ? mAlwaysRefuseMessage : mFirstRefuseMessage).
                 setTitle(getString(R.string.dialog_title)).
-                setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        onCancelPermission();
-                    }
-                })
-                .setPositiveButton(isAlwaysRefuse ? getString(R.string.set) : getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        onSurePermission(isAlwaysRefuse);
-                    }
-                })
+                setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> onCancelPermission())
+                .setPositiveButton(isAlwaysRefuse ? getString(R.string.set) : getString(R.string.ok), (dialogInterface, i) -> onSurePermission(isAlwaysRefuse))
                 .show();
-
     }
 
     @Override

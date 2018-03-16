@@ -38,7 +38,7 @@
     <!-- 状态栏颜色 -->
     <color name="statusBar">#ffffff</color>
     <!-- 界面头部背景色 -->
-    <color name="appHeadBg">#ffffff</color>
+    <color name="appHeadBg">#61B8Fb</color>
     <!-- 界面背景色 -->
     <color name="BgColor">#f7f7f7</color>
 

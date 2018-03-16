@@ -72,41 +72,6 @@ public class ConstantUtils {
     public static final String isfirstOpenApp = "userIsFirstOpenApp";
 
 
-    /**
-     * 普通 状态栏
-     */
-    public static final int OrdinaryStatus = 1;
-    /**
-     * 全屏透明 状态栏
-     */
-    public static final int ImageTransparent = 2;
-    /**
-     * 全屏半透明 状态栏
-     */
-    public static final int ImageTranslucent = 3;
-
-    /**
-     * ToolBar+TabLayout可伸缩 状态栏
-     */
-    public static final int TelescopicStatus = 4;
-    /**
-     * DrawerLayout+ToolBar+TabLayout 可伸缩 状态栏
-     */
-    public static final int DrawerToolbarTabLayout = 5;
-    /**
-     * CollapsingToolbarLayout状态栏(可折叠图片) 状态栏
-     */
-    public static final int CollapsingToolbar = 6;
-    /**
-     * CollapsingToolbar折叠时statusBar显示和隐藏 状态栏
-     */
-    public static final int CollapsingToolbarStatus = 7;
-
-    /**
-     * DrawerLayout+ToolBar 状态栏
-     */
-    public static final int DrawerToolbar = 8;
-
 
 
 

@@ -12,70 +12,8 @@
     <string name="rememberPass">记住密码</string>
     <string name="loginTitel">全 国 学 校 体 育 联 盟\nThe National School Physical Education Leagues</string>
 
-    <string name="juzi">我运动、我快乐，我锻炼、我提高</string>
-
-    <string name="age">%1$s\n年龄</string>
-    <string name="height">%1$s\n身高(cm)</string>
-    <string name="weight">%1$s\n体重(kg)</string>
-
-    <string name="schoolNum">学籍号</string>
-    <string name="birthday">出生日期</string>
-    <string name="grade">年级</string>
-    <string name="classGrade">班级</string>
-    <string name="school">学校</string>
-    <string name="parentPhone">家长电话</string>
-
-    <string name="myData">个人资料</string>
-    <string name="imgHead">头像</string>
-    <string name="sex">性别</string>
-    <string name="nation">民族</string>
-    <string name="agemodify">年龄</string>
-    <string name="heightModify">身高(cm)</string>
-    <string name="weightModify">体重(kg)</string>
-
-    <string name="body_detection">形体机体检测结果分析</string>
-    <string name="physical_fitness">体能测试结果分析</string>
-    <string name="meals_recommend">膳食推荐</string>
-
-    <string name="monday">周\n一</string>
-    <string name="tuesday">周\n二</string>
-    <string name="wednesday">周\n三</string>
-    <string name="thursday">周\n四</string>
-    <string name="friday">周\n五</string>
-    <string name="saturday">周\n六</string>
-    <string name="sunday">周\n日</string>
-
-    <string name="sports_suggest">运动建议</string>
-
-    <!-- 数据模块 -->
-    <string name="data1">身高</string>
-    <string name="data2">体重</string>
-    <string name="data3">总分</string>
-    <string name="data4">BMI</string>
-    <string name="data5">肺活量</string>
-    <string name="data6">50米</string>
-    <string name="data7">坐位体前屈</string>
-    <string name="data8">跳绳</string>
-    <string name="data9">仰卧起坐</string>
-    <string name="data10">往返跑</string>
-    <string name="data11">立定跳远</string>
-
-    <string name="publishingDynamics">发布动态</string>
-    <string name="publishing">发布</string>
-    <string name="publishingTips">分享此刻的心情</string>
-
-    <string name="deleteing">正在删除</string>
-
-    <string name="my_school_friends">我的校园圈</string>
+    <string name="statusTitle">多状态</string>
 
     <string name="loginTitel2">( 教 学 改 革 )\n(Education Reform)</string>
 
-    <string name="praise">点赞</string>
-
-    <string name="cancel_praise">取消点赞</string>
-
-    <string name="my_social">我的动态</string>
-    <string name="web_error">抱歉~\n加载失败,点击重新加载</string>
-    <string name="self_check_data">数据自我检测</string>
-    <string name="self_check_hint">输入数值</string>
 </resources>

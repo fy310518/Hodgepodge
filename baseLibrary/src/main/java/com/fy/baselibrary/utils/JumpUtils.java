@@ -148,8 +148,7 @@ public class JumpUtils {
         Intent intent = new Intent(act, actClass);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  //注意
         act.startActivity(intent);
-
-        exitActivity(act);
+        act.finish();
     }
 
     /**

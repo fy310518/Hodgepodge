@@ -8,56 +8,42 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 /**
  * Created by chenpengfei on 2016/12/15.
  */
-public class RootFrameLayout extends FrameLayout {
+public class RootFrameLayout extends LinearLayout {
 
     /**
      *  loading 加载id
      */
     public static final int LAYOUT_LOADING_ID = 1;
 
-    /**
-     *  内容id
-     */
+    /** 内容id */
     public static final int LAYOUT_CONTENT_ID = 2;
 
-    /**
-     *  异常id
-     */
+    /** 异常id */
     public static final int LAYOUT_ERROR_ID = 3;
 
-    /**
-     *  网络异常id
-     */
+    /** 网络异常id */
     public static final int LAYOUT_NETWORK_ERROR_ID = 4;
 
-    /**
-     *  空数据id
-     */
+    /** 空数据id */
     public static final int LAYOUT_EMPTYDATA_ID = 5;
 
-    /**
-     * 请求失败 标记
-     */
+    /** 请求失败 标记 */
     public static final int REQUEST_FAIL = 1006;
 
-    /**
-     * 关闭加载 对话框
-     */
+    /** 关闭加载 对话框 */
     public static final int LAYOUT_CLOSE_LOAD_DIALOG = 1007;
 
-    /**
-     *  存放布局集合
-     */
+    /** 存放布局集合 */
     private SparseArray<View> layoutSparseArray = new SparseArray();
 
-    /**
-     *  布局管理器
-     */
+    /** 布局管理器 */
     private StatusLayoutManager mStatusLayoutManager;
 
 
@@ -150,12 +136,18 @@ public class RootFrameLayout extends FrameLayout {
             View valueView = layoutSparseArray.valueAt(i);
             //显示该view
             if(key == id) {
-                valueView.setVisibility(View.VISIBLE);
-                if(mStatusLayoutManager.onShowHideViewListener != null) mStatusLayoutManager.onShowHideViewListener.onShowView(valueView, key);
+                if (id == LAYOUT_CONTENT_ID)valueView.setVisibility(View.VISIBLE);
+                else {
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
+                    mStatusLayoutManager.targetContext
+                            .getParentView()
+                            .addView(valueView, params);
+                }
             } else {
-                if(valueView.getVisibility() != View.GONE) {
-                    valueView.setVisibility(View.GONE);
-                    if(mStatusLayoutManager.onShowHideViewListener != null) mStatusLayoutManager.onShowHideViewListener.onHideView(valueView, key);
+                if (id == LAYOUT_CONTENT_ID)valueView.setVisibility(View.GONE);
+                else {
+                    mStatusLayoutManager.targetContext
+                            .getParentView().removeView(valueView);
                 }
             }
         }

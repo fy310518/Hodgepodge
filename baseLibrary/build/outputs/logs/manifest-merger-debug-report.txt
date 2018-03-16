@@ -30,9 +30,9 @@ ADDED from D:\Android\WorkSpase\Hodgepodge\baseLibrary\src\main\AndroidManifest.
 	android:allowBackup
 		ADDED from D:\Android\WorkSpase\Hodgepodge\baseLibrary\src\main\AndroidManifest.xml:5:9-35
 activity#com.fy.baselibrary.permission.PermissionActivity
-ADDED from D:\Android\WorkSpase\Hodgepodge\baseLibrary\src\main\AndroidManifest.xml:10:9-12:62
+ADDED from D:\Android\WorkSpase\Hodgepodge\baseLibrary\src\main\AndroidManifest.xml:10:9-12:52
 	android:theme
-		ADDED from D:\Android\WorkSpase\Hodgepodge\baseLibrary\src\main\AndroidManifest.xml:12:13-59
+		ADDED from D:\Android\WorkSpase\Hodgepodge\baseLibrary\src\main\AndroidManifest.xml:12:13-49
 	android:name
 		ADDED from D:\Android\WorkSpase\Hodgepodge\baseLibrary\src\main\AndroidManifest.xml:11:13-58
 uses-sdk

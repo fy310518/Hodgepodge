@@ -11,20 +11,21 @@ import android.view.ViewStub;
  */
 public class StatusLayoutManager {
 
-     final Context context;
-     final ViewStub netWorkErrorVs;
-     final int netWorkErrorRetryViewId;
-     final ViewStub emptyDataVs;
-     final int emptyDataRetryViewId;
-     final ViewStub errorVs;
-     final int errorRetryViewId;
-     final int loadingLayoutResId;
-     final int contentLayoutResId;
-     final int retryViewId;
+    TargetContext targetContext;
+    final Context context;
+    final ViewStub netWorkErrorVs;
+    final int netWorkErrorRetryViewId;
+    final ViewStub emptyDataVs;
+    final int emptyDataRetryViewId;
+    final ViewStub errorVs;
+    final int errorRetryViewId;
+    final int loadingLayoutResId;
+    final int contentLayoutResId;
+    final int retryViewId;
 
-     final RootFrameLayout rootFrameLayout;
-     final OnShowHideViewListener onShowHideViewListener;
-     final OnRetryListener onRetryListener;
+    final RootFrameLayout rootFrameLayout;
+    final OnShowHideViewListener onShowHideViewListener;
+    final OnRetryListener onRetryListener;
 
     public StatusLayoutManager(Builder builder) {
         this.context = builder.context;
@@ -41,6 +42,7 @@ public class StatusLayoutManager {
         this.onRetryListener = builder.onRetryListener;
 
         this.rootFrameLayout = builder.rootFrameLayout;
+        this.targetContext   = builder.targetContext;
 
         rootFrameLayout.setStatusLayoutManager(this);
     }
@@ -81,17 +83,10 @@ public class StatusLayoutManager {
         rootFrameLayout.showError();
     }
 
-    /**
-     *  得到root 布局
-     */
-    public View getRootLayout() {
-        return rootFrameLayout;
-    }
-
-
 
     public static final class Builder {
 
+        TargetContext targetContext;
         private Context context;
         private RootFrameLayout rootFrameLayout;
 
@@ -112,8 +107,14 @@ public class StatusLayoutManager {
         private OnShowHideViewListener onShowHideViewListener;
         private OnRetryListener onRetryListener;
 
-        public Builder(Context context) {
+        /**
+         *
+         * @param context
+         * @param target    activity 或者 View
+         */
+        public Builder(Context context, Object target) {
             this.context = context;
+            this.targetContext = LoadSirUtil.getTargetContext(target);
         }
 
         /** 设置 顶级布局 */
@@ -194,8 +195,8 @@ public class StatusLayoutManager {
         }
     }
 
-    public static Builder newBuilder(Context context) {
-       return new Builder(context);
+    public static Builder newBuilder(Context context, Object target) {
+       return new Builder(context, target);
     }
 
 }

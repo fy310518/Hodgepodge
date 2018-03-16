@@ -1,19 +1,25 @@
 package hodgepodge.fy.com.main;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.fy.baselibrary.base.BaseActivity;
-import com.fy.baselibrary.statusbar.MdStatusBarCompat;
+import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.startactivity.StartActivity;
+import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.SpfUtils;
@@ -22,6 +28,7 @@ import com.fy.baselibrary.utils.T;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import hodgepodge.fy.com.R;
 import hodgepodge.fy.com.login.LoginActivity;
 import hodgepodge.fy.com.main.fragment.FragmentFive;
@@ -37,7 +44,9 @@ import io.reactivex.schedulers.Schedulers;
  * 体育联盟 主界面
  * Created by fangs on 2017/12/12.
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity implements IBaseActivity {
+
+    private AppCompatActivity mContext;
 
     private static final String[] FRAGMENT_TAG = {"FragmentOne", "FragmentTwo", "FragmentThree", "FragmentFour", "FragmentFive"};
     private FragmentManager fragmentManageer;
@@ -61,26 +70,27 @@ public class MainActivity extends BaseActivity {
     ImageView loadImg;
 
     @Override
-    protected void setStatusBarType() {
-        MdStatusBarCompat.setImageTransparent(this);
+    public boolean isShowHeadView() {
+        return false;
     }
 
     @Override
-    protected int setContentView() {
-        return 0;
+    public int setView() {
+        return R.layout.activity_main;
+    }
+
+    @SuppressLint("ResourceAsColor")
+    @Override
+    public void setStatusBar(Activity activity) {
+        MdStatusBar.setTransparentBar(activity, R.color.transparent, R.color.transparent);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_main);
-        super.onCreate(savedInstanceState);
-    }
+    public void initData(Activity activity, Bundle savedInstanceState) {
+        mContext = this;
 
-    @Override
-    protected void init(Bundle savedInstanceState) {
         //显示欢迎页，并设置点击事件（但是不设置点击回调）
         loadImg.setVisibility(View.VISIBLE);
-        loadImg.setOnClickListener(this);
 
         ConstantUtils.token = SpfUtils.getSpfSaveStr("token");
         ConstantUtils.studentID = SpfUtils.getSpfSaveInt("studentId");
@@ -253,5 +263,35 @@ public class MainActivity extends BaseActivity {
                         loadImg.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    @OnClick({R.id.loadImg})
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void reTry() {
+
+    }
+
+    //保存点击的时间
+    private long exitTime = 0;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            //处理 退出界面
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+
+                T.showLong(com.fy.baselibrary.R.string.exit_app);
+                exitTime = System.currentTimeMillis();
+            } else {
+                JumpUtils.exitApp(mContext, StartActivity.class);
+            }
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -2,11 +2,26 @@ package com.fy.baselibrary.application;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewStub;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.fy.baselibrary.R;
 import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.statuslayout.OnRetryListener;
+import com.fy.baselibrary.statuslayout.OnShowHideViewListener;
+import com.fy.baselibrary.statuslayout.RootFrameLayout;
+import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;
 
 import butterknife.ButterKnife;
@@ -19,26 +34,53 @@ import butterknife.ButterKnife;
 public class BaseActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
     public static final String TAG = "ActivityCallbacks";
 
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         L.d(TAG, "Create()");
 
         BaseActivityBean activityBean = new BaseActivityBean();
+
+        IBaseActivity act = null;
+        if (activity instanceof IBaseActivity) {
+            act = (IBaseActivity) activity;
+
+            if (act.setView() != 0){
+                activity.setContentView(R.layout.activity_base);
+                RootFrameLayout linearLRoot = activity.findViewById(R.id.linearLRoot);
+
+                View view = LayoutInflater.from(activity).inflate(act.setView(), null);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
+
+                linearLRoot.addView(view, params);
+                if (act.isShowHeadView())initHead(activity);
+
+                initSLManager(act, linearLRoot);
+            }
+
+            act.setStatusBar(activity);
+        }
+
+        //设置 黄油刀 简化 Android 样板代码
+        activityBean.setUnbinder(ButterKnife.bind(activity));
+
 //        注册屏幕旋转监听
         BaseOrientoinListener orientoinListener = new BaseOrientoinListener(activity);
-        boolean autoRotateOn = (android.provider.Settings.System.getInt(activity.getContentResolver(),
-                Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
-
+        boolean autoRotateOn =
+                (android.provider.Settings.System
+                        .getInt(activity.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1);
         //检查系统是否开启自动旋转
-        if (autoRotateOn) {
-            orientoinListener.enable();
-        }
+        if (autoRotateOn) orientoinListener.enable();
 
         activityBean.setOrientoinListener(orientoinListener);
 
-        activityBean.setUnbinder(ButterKnife.bind(activity));
-
         activity.getIntent().putExtra("ActivityBean", activityBean);
+
+        //基础配置 执行完成，再执行 初始化 activity 操作
+        if (null != act) act.initData(activity, savedInstanceState);
     }
 
     @Override
@@ -74,10 +116,77 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     public void onActivityDestroyed(Activity activity) {
         L.d(TAG, "Destroy()");
 
-        BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent().getSerializableExtra("ActivityBean");
+        BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent()
+                .getSerializableExtra("ActivityBean");
+
         if (null != activityBean) {
-            activityBean.getUnbinder().unbind();
-            activityBean.getOrientoinListener().disable();//销毁 屏幕旋转监听
+            //解绑定 黄油刀
+            if (null != activityBean.getUnbinder()) activityBean.getUnbinder().unbind();
+            //销毁 屏幕旋转监听
+            if (null != activityBean.getOrientoinListener())activityBean.getOrientoinListener().disable();
         }
+    }
+
+    /**
+     * 初始化 toolbar
+     * @param activity
+     */
+    private void initHead(Activity activity) {
+
+        ViewStub vStubTitleBar = activity.findViewById(R.id.vStubTitleBar);
+        vStubTitleBar.inflate();
+
+        //这里全局给Activity设置toolbar和title
+        Toolbar toolbar = activity.findViewById(R.id.toolbar);
+        if (null != toolbar) { //找到 Toolbar 并且替换 Actionbar
+            if (activity instanceof AppCompatActivity) {
+                ((AppCompatActivity) activity).setSupportActionBar(toolbar);
+                ((AppCompatActivity) activity).getSupportActionBar().setDisplayShowTitleEnabled(false);
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    activity.setActionBar((android.widget.Toolbar) activity.findViewById(R.id.toolbar));
+                    activity.getActionBar().setDisplayShowTitleEnabled(false);
+                }
+            }
+        }
+
+        //找到 Toolbar 的标题栏并设置标题名
+        TextView tvTitle = activity.findViewById(R.id.tvTitle);
+        if (null != tvTitle) tvTitle.setText(activity.getTitle());
+
+        //找到 Toolbar 的返回按钮,并且设置点击事件,点击关闭这个 Activity
+        TextView tvBack = activity.findViewById(R.id.tvBack);
+        if (null != tvBack) tvBack.setOnClickListener(v -> activity.onBackPressed());
+    }
+
+
+    /**
+     * 设置 多状态视图 管理器
+     *
+     * @param viewContent
+     */
+    protected StatusLayoutManager initSLManager(IBaseActivity act, RootFrameLayout viewContent) {
+        return StatusLayoutManager.newBuilder((Context) act, (Activity)act)
+                .setRootLayout(viewContent)
+                .contentView(act.setView())
+                .loadingView(R.layout.activity_loading)
+                .errorView(R.layout.activity_error)
+                .netWorkErrorView(R.layout.activity_networkerror)
+                .emptyDataView(R.layout.activity_emptydata)
+                .retryViewId(R.id.tvTry)
+                .onShowHideViewListener(new OnShowHideViewListener() {
+                    @Override
+                    public void onShowView(View view, int id) {
+                    }
+
+                    @Override
+                    public void onHideView(View view, int id) {
+                    }
+                }).onRetryListener(new OnRetryListener() {
+                    @Override
+                    public void onRetry() {
+
+                    }
+                }).build();
     }
 }

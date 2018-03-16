@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     protected ACache mCache;
 
-    protected BaseActivity mContext;
+    protected AppCompatActivity mContext;
     protected View mRootView;
     protected Unbinder unbinder;
 
@@ -34,7 +35,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        this.mContext = (BaseActivity) context;
+        this.mContext = (AppCompatActivity) context;
         mCache = ACache.get(mContext);
     }
 
