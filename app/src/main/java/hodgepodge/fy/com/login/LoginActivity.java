@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.fy.baselibrary.application.IBaseActivity;
@@ -14,6 +15,7 @@ import com.fy.baselibrary.retrofit.RequestUtils;
 import com.fy.baselibrary.retrofit.RxHelper;
 import com.fy.baselibrary.retrofit.RxNetCache;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
+import com.fy.baselibrary.startactivity.StartActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.utils.ConstantUtils;
 import com.fy.baselibrary.utils.JumpUtils;
@@ -232,5 +234,24 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
                     break;
             }
         }
+    }
+
+    //保存点击的时间
+    private long exitTime = 0;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            //处理 退出界面
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+
+                T.showLong(com.fy.baselibrary.R.string.exit_app);
+                exitTime = System.currentTimeMillis();
+            } else {
+                JumpUtils.exitApp(mContext, StartActivity.class);
+            }
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

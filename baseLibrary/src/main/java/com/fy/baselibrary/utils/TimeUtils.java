@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * 时间操作工具类
+ * 时间转换工具类
  *
  * Created by fangs on 2017/3/22.
  */

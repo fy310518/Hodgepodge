@@ -5,7 +5,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 /**
- * 单位转换 和 测量 辅助类
+ * 单位转换 和 测量 工具类
  * <p/>
  * Created by fangs on 2017/3/1.
  */

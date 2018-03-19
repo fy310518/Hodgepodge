@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 
 import butterknife.ButterKnife;
@@ -150,7 +151,8 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
         //找到 Toolbar 的返回按钮,并且设置点击事件,点击关闭这个 Activity
         TextView tvBack = activity.findViewById(R.id.tvBack);
-        if (null != tvBack) tvBack.setOnClickListener(v -> activity.onBackPressed());
+        if (null != tvBack) tvBack.setOnClickListener(v ->
+            JumpUtils.exitActivity((AppCompatActivity) activity));
     }
 
 }

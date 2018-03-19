@@ -6,8 +6,10 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.widget.TextView;
 
 import com.fy.baselibrary.application.BaseApp;
 
@@ -100,5 +102,58 @@ public class TintUtils {
         DrawableCompat.setTintList(drawable, colorList);
 
         return drawable;
+    }
+
+
+    /**
+     * 设置TextView 四个方向某一个方向上的icon (非vector图标)
+     * @param tv
+     * @param id
+     * @param position 设置的位置
+     */
+    public static void setCompoundDrawable(TextView tv, int id, int position) {
+        Context ctx = BaseApp.getAppCtx();
+        Drawable drawable = ContextCompat.getDrawable(ctx, id);
+        setTxtIconLocal(tv, drawable, position);
+    }
+
+    /**
+     * 设置TextView 四个方向某一个方向上的icon (vector图标)
+     * @param tv
+     * @param id
+     * @param position
+     */
+    public static void setCompoundVctDrawable(TextView tv, int id, int position){
+        Context ctx = BaseApp.getAppCtx();
+        VectorDrawableCompat vDrawable = VectorDrawableCompat.create(ctx.getResources(),
+                id, ctx.getTheme());
+
+        setTxtIconLocal(tv, vDrawable, position);
+    }
+
+    /**
+     * 设置icon 在TextView的位置
+     * @param tv
+     * @param drawable
+     * @param position
+     */
+    public static void setTxtIconLocal(TextView tv, Drawable drawable, int position){
+        drawable.setBounds(0, 0,
+                drawable.getMinimumWidth(), drawable.getMinimumHeight());
+
+        switch (position) {
+            case 1:
+                tv.setCompoundDrawables(drawable, null, null, null);
+                break;
+            case 2:
+                tv.setCompoundDrawables(null, drawable, null, null);
+                break;
+            case 3:
+                tv.setCompoundDrawables(null, null, drawable, null);
+                break;
+            case 4:
+                tv.setCompoundDrawables(null, null, null, drawable);
+                break;
+        }
     }
 }
