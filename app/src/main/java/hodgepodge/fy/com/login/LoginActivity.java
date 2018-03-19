@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
             case R.id.tvLogin:
                 Bundle bundle = new Bundle();
                 bundle.putString("大王", "大王叫我来巡山");
-                JumpUtils.jump(mContext, StatusDemoActivity.class, bundle);
+                JumpUtils.jump(mContext, MainActivity.class, bundle);
 //                login();
 //                getNews();
                 break;

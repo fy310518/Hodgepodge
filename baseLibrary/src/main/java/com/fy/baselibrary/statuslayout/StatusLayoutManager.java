@@ -2,85 +2,161 @@ package com.fy.baselibrary.statuslayout;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.LinearLayout;
 
 /**
  * 多状态视图 管理类
- * Created by chenpengfei on 2016/12/15.
+ * Created by fangs on 2016/12/15.
  */
 public class StatusLayoutManager {
 
+    /** 内容id */
+    public static final int LAYOUT_CONTENT_ID = 0;
+
+    /** 异常id */
+    public static final int LAYOUT_ERROR_ID = 1;
+
+    /** 网络异常id */
+    public static final int LAYOUT_NETWORK_ERROR_ID = 2;
+
+    /** 空数据id */
+    public static final int LAYOUT_EMPTYDATA_ID = 3;
+
+    /** 请求失败 标记 */
+    public static final int REQUEST_FAIL = 1006;
+
+    /** 关闭加载 对话框 */
+    public static final int LAYOUT_CLOSE_LOAD_DIALOG = 1007;
+
+    /** 存放布局集合 */
+    private SparseArray<View> layoutSparseArray = new SparseArray();
+
     TargetContext targetContext;
     final Context context;
-    final ViewStub netWorkErrorVs;
-    final int netWorkErrorRetryViewId;
-    final ViewStub emptyDataVs;
-    final int emptyDataRetryViewId;
-    final ViewStub errorVs;
-    final int errorRetryViewId;
-    final int loadingLayoutResId;
-    final int contentLayoutResId;
+    boolean isShowHeadView;
+
+    int netWorkErrorRetryViewId;
+    int errorRetryViewId;
+    int emptyDataRetryViewId;
+    int loadingLayoutResId;
+    int contentLayoutResId;
+
     final int retryViewId;
 
-    final RootFrameLayout rootFrameLayout;
     final OnShowHideViewListener onShowHideViewListener;
     final OnRetryListener onRetryListener;
 
     public StatusLayoutManager(Builder builder) {
         this.context = builder.context;
-        this.loadingLayoutResId = builder.loadingLayoutResId;
-        this.netWorkErrorVs = builder.netWorkErrorVs;
+        this.targetContext   = builder.targetContext;
+
+        this.isShowHeadView = builder.isShowHeadView;
         this.netWorkErrorRetryViewId = builder.netWorkErrorRetryViewId;
-        this.emptyDataVs = builder.emptyDataVs;
         this.emptyDataRetryViewId = builder.emptyDataRetryViewId;
-        this.errorVs = builder.errorVs;
         this.errorRetryViewId = builder.errorRetryViewId;
-        this.contentLayoutResId = builder.contentLayoutResId;
         this.onShowHideViewListener = builder.onShowHideViewListener;
         this.retryViewId = builder.retryViewId;
         this.onRetryListener = builder.onRetryListener;
-
-        this.rootFrameLayout = builder.rootFrameLayout;
-        this.targetContext   = builder.targetContext;
-
-        rootFrameLayout.setStatusLayoutManager(this);
     }
 
+    public boolean addLayoutResId(@LayoutRes int layoutResId, int id) {
+        View resView = LayoutInflater.from(context).inflate(layoutResId, null);
+        layoutSparseArray.put(id, resView);
 
-    /**
-     *  显示loading
-     */
-    public void showLoading() {
-        rootFrameLayout.showLoading();
+        return true;
     }
 
-    /**
-     *  显示内容
-     */
+    /** 显示内容 */
     public void showContent() {
-        rootFrameLayout.showContent();
+        if(layoutSparseArray.get(LAYOUT_CONTENT_ID) != null)
+            showHideViewById(LAYOUT_CONTENT_ID);
     }
 
-    /**
-     *  显示空数据
-     */
+    /** 显示空数据 */
     public void showEmptyData() {
-        rootFrameLayout.showEmptyData();
+        if(inflateLayout(LAYOUT_EMPTYDATA_ID))
+            showHideViewById(LAYOUT_EMPTYDATA_ID);
     }
 
-    /**
-     *  显示网络异常
-     */
+    /** 显示网络异常 */
     public void showNetWorkError() {
-        rootFrameLayout.showNetWorkError();
+        if(inflateLayout(LAYOUT_NETWORK_ERROR_ID))
+            showHideViewById(LAYOUT_NETWORK_ERROR_ID);
+    }
+
+    /** 显示异常 */
+    public void showError() {
+        if(inflateLayout(LAYOUT_ERROR_ID))
+            showHideViewById(LAYOUT_ERROR_ID);
     }
 
     /**
-     *  显示异常
+     *  根据ID 显示或隐藏布局
+     * @param id
      */
-    public void showError() {
-        rootFrameLayout.showError();
+    private void showHideViewById(int id) {
+        View vgBody = targetContext.getParentView().getChildAt(1);
+        vgBody.setVisibility(id == LAYOUT_CONTENT_ID ? View.VISIBLE : View.GONE);
+
+        if (targetContext.getParentView().getChildCount() > 2) {
+            targetContext.getParentView().removeViewAt(2);
+        }
+
+        if (id == LAYOUT_CONTENT_ID) return;
+
+
+        for (int i = 0; i < layoutSparseArray.size(); i++) {
+            int key = layoutSparseArray.keyAt(i);
+            //显示该view
+            if (key == id) {
+                View valueView = layoutSparseArray.valueAt(i);
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
+                targetContext.getParentView().addView(valueView, params);
+            }
+        }
+    }
+
+    private boolean inflateLayout(int id) {
+        boolean isShow = true;
+        if (layoutSparseArray.get(id) != null) return isShow;
+        switch (id) {
+            case LAYOUT_NETWORK_ERROR_ID:
+                isShow = addLayoutResId(netWorkErrorRetryViewId, LAYOUT_NETWORK_ERROR_ID);
+                break;
+            case LAYOUT_ERROR_ID:
+                isShow = addLayoutResId(errorRetryViewId, LAYOUT_ERROR_ID);
+                break;
+            case LAYOUT_EMPTYDATA_ID:
+                isShow = addLayoutResId(emptyDataRetryViewId, LAYOUT_EMPTYDATA_ID);
+                break;
+        }
+
+        retryLoad(layoutSparseArray.get(id), id);
+        return isShow;
+    }
+
+    /** 重试加载 */
+    public void retryLoad(View view, int id) {
+        View retryView = view.findViewById(retryViewId != 0 ? retryViewId : id);
+
+        if (retryView == null || onRetryListener == null) return;
+
+        retryView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRetryListener.onRetry();
+            }
+        });
+    }
+
+    public static Builder newBuilder(Context context, Object target) {
+        return new Builder(context, target);
     }
 
 
@@ -88,18 +164,11 @@ public class StatusLayoutManager {
 
         TargetContext targetContext;
         private Context context;
-        private RootFrameLayout rootFrameLayout;
 
-        private int loadingLayoutResId;//加载页 布局文件ID
-        private int contentLayoutResId;//正常页 布局文件ID
+        private boolean isShowHeadView;//是否显示 头部标题栏
 
-        private ViewStub netWorkErrorVs;//网络错误
         private int netWorkErrorRetryViewId;//网络错误 布局文件ID
-
-        private ViewStub emptyDataVs;//空数据
         private int emptyDataRetryViewId;//空数据 布局文件ID
-
-        private ViewStub errorVs;//请求错误（失败）
         private int errorRetryViewId;// 请求错误（失败）布局文件ID
 
         private int retryViewId;//请求错误或网络错误时候 的刷新按钮
@@ -117,51 +186,22 @@ public class StatusLayoutManager {
             this.targetContext = LoadSirUtil.getTargetContext(target);
         }
 
-        /** 设置 顶级布局 */
-        public Builder setRootLayout(RootFrameLayout rootFrameLayout){
-            this.rootFrameLayout = rootFrameLayout;
+        public Builder setShowHeadView(boolean showHeadView) {
+            this.isShowHeadView = showHeadView;
             return this;
         }
 
-        public Builder loadingView(@LayoutRes int loadingLayoutResId) {
-            this.loadingLayoutResId = loadingLayoutResId;
-            return this;
-        }
-
-        public Builder netWorkErrorView(@LayoutRes int newWorkErrorId) {
-            netWorkErrorVs = new ViewStub(context);
-            netWorkErrorVs.setLayoutResource(newWorkErrorId);
-            return this;
-        }
-
-        public Builder emptyDataView(@LayoutRes int noDataViewId) {
-            emptyDataVs = new ViewStub(context);
-            emptyDataVs.setLayoutResource(noDataViewId);
-            return this;
-        }
-
-        public Builder errorView(@LayoutRes int errorViewId) {
-            errorVs = new ViewStub(context);
-            errorVs.setLayoutResource(errorViewId);
-            return this;
-        }
-
-        public Builder contentView(@LayoutRes int contentLayoutResId) {
-            this.contentLayoutResId = contentLayoutResId;
-            return this;
-        }
-
-        public Builder netWorkErrorRetryViewId(int netWorkErrorRetryViewId) {
+        public Builder netWorkErrorView(int netWorkErrorRetryViewId) {
             this.netWorkErrorRetryViewId = netWorkErrorRetryViewId;
             return this;
         }
 
-        public Builder emptyDataRetryViewId(int emptyDataRetryViewId) {
+        public Builder emptyDataView(int emptyDataRetryViewId) {
             this.emptyDataRetryViewId = emptyDataRetryViewId;
             return this;
         }
 
-        public Builder errorRetryViewId(int errorRetryViewId) {
+        public Builder errorView(int errorRetryViewId) {
             this.errorRetryViewId = errorRetryViewId;
             return this;
         }
@@ -193,10 +233,6 @@ public class StatusLayoutManager {
         public StatusLayoutManager build() {
             return new StatusLayoutManager(this);
         }
-    }
-
-    public static Builder newBuilder(Context context, Object target) {
-       return new Builder(context, target);
     }
 
 }

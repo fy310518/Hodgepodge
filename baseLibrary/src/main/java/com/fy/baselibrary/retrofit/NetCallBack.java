@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.fy.baselibrary.application.BaseApp;
 import com.fy.baselibrary.base.CommonDialog;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
-import com.fy.baselibrary.statuslayout.RootFrameLayout;
+import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;
 import com.fy.baselibrary.utils.NetUtils;
 import com.fy.baselibrary.utils.T;
@@ -60,7 +60,7 @@ public abstract class NetCallBack<V> implements Observer<V> {
     public void onNext(V t) {
         L.e("net", "onNext()");
 
-        updataLayout(RootFrameLayout.LAYOUT_CONTENT_ID);
+        updataLayout(StatusLayoutManager.LAYOUT_CONTENT_ID);
         if (null != t) {
             onSuccess(t);
         } else {
@@ -74,7 +74,7 @@ public abstract class NetCallBack<V> implements Observer<V> {
         e.printStackTrace();
         if (!NetUtils.isConnected(BaseApp.getAppCtx())) {
             actionResponseError("网络不可用");
-            updataLayout(RootFrameLayout.LAYOUT_NETWORK_ERROR_ID);
+            updataLayout(StatusLayoutManager.LAYOUT_NETWORK_ERROR_ID);
         } else if (e instanceof ServerException) {
             if (e.getMessage().equals("token失效，请重新登录")) {//token 失效 进入登录页面
                 try {
@@ -93,16 +93,16 @@ public abstract class NetCallBack<V> implements Observer<V> {
             }
 
             if (((ServerException) e).code != 401)actionResponseError(e.getMessage());
-            updataLayout(RootFrameLayout.REQUEST_FAIL);
+            updataLayout(StatusLayoutManager.REQUEST_FAIL);
         } else if (e instanceof ConnectException) {
             actionResponseError("请求超时，请稍后再试...");
-            updataLayout(RootFrameLayout.REQUEST_FAIL);
+            updataLayout(StatusLayoutManager.REQUEST_FAIL);
         } else if (e instanceof SocketTimeoutException) {
             actionResponseError("服务器响应超时，请稍后再试...");
-            updataLayout(RootFrameLayout.REQUEST_FAIL);
+            updataLayout(StatusLayoutManager.REQUEST_FAIL);
         } else {
             actionResponseError("请求失败，请稍后再试...");
-            updataLayout(RootFrameLayout.REQUEST_FAIL);
+            updataLayout(StatusLayoutManager.REQUEST_FAIL);
         }
         dismissProgress();
     }

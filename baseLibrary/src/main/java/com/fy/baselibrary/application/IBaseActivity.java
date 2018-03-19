@@ -25,7 +25,7 @@ public interface IBaseActivity {
     int setView();
 
     /**
-     * 设置当前activity 状态栏
+     * 设置当前 activity 状态栏导航栏
      */
     void setStatusBar(Activity activity);
 

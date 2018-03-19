@@ -57,18 +57,6 @@ public class LoadSirUtil {
                     target.getClass().getSimpleName()));
         }
 
-        if (contentParent != null) {
-            contentParent.removeView(oldContent);
-        }
-
         return new TargetContext(context, contentParent, oldContent, childIndex);
-    }
-
-    /**
-     * 判断是否 主线程线程
-     * @return
-     */
-    public static boolean isMainThread() {
-        return Looper.myLooper() == Looper.getMainLooper();
     }
 }

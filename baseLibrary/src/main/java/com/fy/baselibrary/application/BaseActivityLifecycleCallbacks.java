@@ -2,7 +2,6 @@ package com.fy.baselibrary.application;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -18,10 +17,6 @@ import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.retrofit.RequestUtils;
-import com.fy.baselibrary.statuslayout.OnRetryListener;
-import com.fy.baselibrary.statuslayout.OnShowHideViewListener;
-import com.fy.baselibrary.statuslayout.RootFrameLayout;
-import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;
 
 import butterknife.ButterKnife;
@@ -32,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by fangs on 2017/5/18.
  */
 public class BaseActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
-    public static final String TAG = "ActivityCallbacks";
+    public static String TAG = "ActivityCallbacks";
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -50,15 +45,14 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
 
             if (act.setView() != 0){
                 activity.setContentView(R.layout.activity_base);
-                RootFrameLayout linearLRoot = activity.findViewById(R.id.linearLRoot);
+                LinearLayout linearLRoot = activity.findViewById(R.id.linearLRoot);
+
+                if (act.isShowHeadView())initHead(activity);
 
                 View view = LayoutInflater.from(activity).inflate(act.setView(), null);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
 
                 linearLRoot.addView(view, params);
-                if (act.isShowHeadView())initHead(activity);
-
-                initSLManager(act, linearLRoot);
             }
 
             act.setStatusBar(activity);
@@ -159,34 +153,4 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
         if (null != tvBack) tvBack.setOnClickListener(v -> activity.onBackPressed());
     }
 
-
-    /**
-     * 设置 多状态视图 管理器
-     *
-     * @param viewContent
-     */
-    protected StatusLayoutManager initSLManager(IBaseActivity act, RootFrameLayout viewContent) {
-        return StatusLayoutManager.newBuilder((Context) act, (Activity)act)
-                .setRootLayout(viewContent)
-                .contentView(act.setView())
-                .loadingView(R.layout.activity_loading)
-                .errorView(R.layout.activity_error)
-                .netWorkErrorView(R.layout.activity_networkerror)
-                .emptyDataView(R.layout.activity_emptydata)
-                .retryViewId(R.id.tvTry)
-                .onShowHideViewListener(new OnShowHideViewListener() {
-                    @Override
-                    public void onShowView(View view, int id) {
-                    }
-
-                    @Override
-                    public void onHideView(View view, int id) {
-                    }
-                }).onRetryListener(new OnRetryListener() {
-                    @Override
-                    public void onRetry() {
-
-                    }
-                }).build();
-    }
 }
