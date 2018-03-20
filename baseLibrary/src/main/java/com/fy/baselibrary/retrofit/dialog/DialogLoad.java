@@ -27,7 +27,7 @@ public class DialogLoad extends CommonDialog {
 
     @Override
     protected int getContentLayout() {
-        return R.layout.dialog_loading;
+        return R.layout.state_dialog_loading;
     }
 
     @Override

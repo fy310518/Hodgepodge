@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
-import com.fy.baselibrary.statuslayout.OnRetryListener;
-import com.fy.baselibrary.statuslayout.OnShowHideViewListener;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 
 import java.util.concurrent.TimeUnit;
@@ -106,9 +104,9 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     protected void initSLManager() {
         slManager = StatusLayoutManager.newBuilder(this, this)
                 .setShowHeadView(isShowHeadView())
-                .errorView(R.layout.activity_error)
-                .netWorkErrorView(R.layout.activity_networkerror)
-                .emptyDataView(R.layout.activity_emptydata)
+                .errorView(R.layout.state_include_error)
+                .netWorkErrorView(R.layout.state_include_networkerror)
+                .emptyDataView(R.layout.state_include_emptydata)
                 .retryViewId(R.id.tvTry)
                 .onRetryListener(() -> reTry())
                 .build();

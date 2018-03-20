@@ -6,7 +6,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.ViewGroup;
 
 /**
- * 出来 GridLayoutManager和 StaggeredGridLayoutManager添加头部布局 异常
+ * 处理 GridLayoutManager和 StaggeredGridLayoutManager添加头部布局 异常
  * Created by zhy on 16/6/28.
  */
 public class WrapperUtils {

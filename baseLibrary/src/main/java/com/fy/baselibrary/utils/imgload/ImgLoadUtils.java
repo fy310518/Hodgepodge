@@ -113,9 +113,9 @@ public class ImgLoadUtils {
     public static void loadCircleImg(String url, ImageView imageView) {
         Context context = BaseApp.getAppCtx();
         Glide.with(context).load(url)
-                .fallback(R.mipmap.userimg)
+                .fallback(R.mipmap.img_load_error)
                 .placeholder(R.mipmap.img_loading)
-                .error(R.mipmap.userimg)
+                .error(R.mipmap.img_load_error)
                 .transform(new GlideCircleTransform(context))
                 .skipMemoryCache(true)//不自动缓存到内存
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
