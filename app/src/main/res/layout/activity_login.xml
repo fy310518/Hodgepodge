@@ -52,37 +52,4 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--<android.support.v7.widget.AppCompatImageView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/bottomLine1"-->
-        <!--app:layout_constraintRight_toRightOf="@+id/vGuideLine2"-->
-        <!--app:srcCompat="@drawable/vector_login_goal" />-->
-
-    <!--<android.support.v7.widget.AppCompatImageView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/bottomLine1"-->
-        <!--app:layout_constraintLeft_toLeftOf="@+id/vGuideLine2"-->
-        <!--app:layout_constraintRight_toRightOf="@+id/vGuideLine2"-->
-        <!--app:srcCompat="@drawable/vector_login_grass" />-->
-
-    <!--<android.support.v7.widget.AppCompatImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:scaleType="fitXY"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:srcCompat="@drawable/vector_login_bottom_bg" />-->
-
-    <!--<android.support.v7.widget.AppCompatImageView-->
-        <!--android:id="@+id/imgMotion"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="60dp"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintRight_toLeftOf="@+id/vGuideLine"-->
-        <!--app:layout_constraintVertical_bias="1"-->
-        <!--app:srcCompat="@drawable/vector_login_motion" />-->
-
 </android.support.constraint.ConstraintLayout>
