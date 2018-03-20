@@ -2,6 +2,7 @@ package com.fy.baselibrary.utils;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
@@ -35,9 +36,8 @@ public class TintUtils {
      * @return
      */
     public static Drawable getTintDrawable(@DrawableRes int drawableId, @ColorRes int colorId) {
-        Context ctx = BaseApp.getAppCtx();
-        Drawable drawable = ContextCompat.getDrawable(ctx, drawableId);
-        int color = ContextCompat.getColor(ctx, colorId);
+        Drawable drawable = getDrawable(drawableId);
+        int color = ResourceUtils.getColor(colorId);
 
         Drawable.ConstantState state = drawable.getConstantState();
         Drawable drawable1 = DrawableCompat
@@ -104,54 +104,48 @@ public class TintUtils {
         return drawable;
     }
 
-
     /**
-     * 设置TextView 四个方向某一个方向上的icon (非vector图标)
-     * @param tv
-     * @param id
-     * @param position 设置的位置
+     * 获取 指定 ID 的 drawable 资源
+     * @param draId
+     * @return 返回的 drawable 注意空指针(目前没有遇到空的情况 ^_^)
      */
-    public static void setCompoundDrawable(TextView tv, int id, int position) {
+    public static Drawable getDrawable(@DrawableRes int draId){
+        Drawable drawable = null;
         Context ctx = BaseApp.getAppCtx();
-        Drawable drawable = ContextCompat.getDrawable(ctx, id);
-        setTxtIconLocal(tv, drawable, position);
-    }
 
-    /**
-     * 设置TextView 四个方向某一个方向上的icon (vector图标)
-     * @param tv
-     * @param id
-     * @param position
-     */
-    public static void setCompoundVctDrawable(TextView tv, int id, int position){
-        Context ctx = BaseApp.getAppCtx();
-        VectorDrawableCompat vDrawable = VectorDrawableCompat.create(ctx.getResources(),
-                id, ctx.getTheme());
+        try {
+            //png、shape 图等
+            drawable = ContextCompat.getDrawable(ctx, draId);
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+            //vector图标
+            drawable = VectorDrawableCompat.create(ctx.getResources(), draId, ctx.getTheme());
+        }
 
-        setTxtIconLocal(tv, vDrawable, position);
+        return drawable;
     }
 
     /**
      * 设置icon 在TextView的位置
      * @param tv
      * @param drawable
-     * @param position
+     * @param position 0、1、2、3 分别对应：左、上、右、下
      */
     public static void setTxtIconLocal(TextView tv, Drawable drawable, int position){
         drawable.setBounds(0, 0,
                 drawable.getMinimumWidth(), drawable.getMinimumHeight());
 
         switch (position) {
-            case 1:
+            case 0:
                 tv.setCompoundDrawables(drawable, null, null, null);
                 break;
-            case 2:
+            case 1:
                 tv.setCompoundDrawables(null, drawable, null, null);
                 break;
-            case 3:
+            case 2:
                 tv.setCompoundDrawables(null, null, drawable, null);
                 break;
-            case 4:
+            case 3:
                 tv.setCompoundDrawables(null, null, null, drawable);
                 break;
         }
