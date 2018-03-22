@@ -6,9 +6,11 @@
     android:background="@color/BgColor">
 
     <TextView
+        android:id="@+id/tvPopup"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="fragment 2"
+        android:background="#dec"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

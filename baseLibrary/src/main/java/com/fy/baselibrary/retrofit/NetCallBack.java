@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.fy.baselibrary.application.BaseApp;
-import com.fy.baselibrary.base.CommonDialog;
+import com.fy.baselibrary.base.dialog.CommonDialog;
 import com.fy.baselibrary.retrofit.dialog.IProgressDialog;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.L;

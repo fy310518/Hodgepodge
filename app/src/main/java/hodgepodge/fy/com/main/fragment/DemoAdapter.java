@@ -3,7 +3,7 @@ package hodgepodge.fy.com.main.fragment;
 import android.content.Context;
 
 import com.fy.baselibrary.rv.adapter.RvCommonAdapter;
-import com.fy.baselibrary.rv.adapter.ViewHolder;
+import com.fy.baselibrary.base.ViewHolder;
 
 import java.util.List;
 

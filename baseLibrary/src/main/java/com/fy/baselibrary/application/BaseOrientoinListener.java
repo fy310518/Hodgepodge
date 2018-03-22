@@ -13,6 +13,12 @@ import com.fy.baselibrary.utils.L;
  */
 public class BaseOrientoinListener extends OrientationEventListener {
 
+    /**
+     * android:configChanges="keyboardHidden|orientation|screenSize"
+     * android:screenOrientation="sensor"
+     * 注册activity （配置 则屏幕旋转 不重启activity，不配置 则屏幕旋转 会重启activity）
+     */
+
     public static final String TAG = "activity";
     private Activity context;
 

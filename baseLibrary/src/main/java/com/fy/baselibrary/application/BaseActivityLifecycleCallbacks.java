@@ -91,20 +91,17 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
     @Override
     public void onActivityPaused(Activity activity) {
         L.d(TAG, "Pause()");
-
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
         L.d(TAG, "Stop()");
-
         RequestUtils.clearDispos();
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
         L.d(TAG, "SaveInstanceState()");
-
     }
 
     @Override

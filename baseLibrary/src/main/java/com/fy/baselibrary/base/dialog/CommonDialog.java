@@ -1,4 +1,4 @@
-package com.fy.baselibrary.base;
+package com.fy.baselibrary.base.dialog;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,11 +17,14 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.fy.baselibrary.R;
+import com.fy.baselibrary.base.PopupDismissListner;
+import com.fy.baselibrary.base.ViewHolder;
+import com.fy.baselibrary.utils.DensityUtils;
 import com.fy.baselibrary.utils.L;
 
 /**
  * 应用 所有dialog 的父类
- * <p/>
+ * <br/>
  * Created by fangs on 2017/3/13.
  */
 public abstract class CommonDialog extends DialogFragment {
@@ -36,7 +39,7 @@ public abstract class CommonDialog extends DialogFragment {
 
     protected View mRootView;
 
-    DialogDismissListner dialogList;
+    PopupDismissListner dialogList;
 
     /** dialog显示位置 */
     protected int gravity = Gravity.CENTER;
@@ -47,51 +50,51 @@ public abstract class CommonDialog extends DialogFragment {
 
     /** 点击window外的区域 是否消失 */
     protected boolean isHide = false;
+    /** 灰度深浅 */
+    protected float dimAmount = 0.5f;
 
-    protected float dimAmount = 0.5f;//灰度深浅
     /** 宽度 -1(ViewGroup.LayoutParams.MATCH_PARENT)：撑满；-2(ViewGroup.LayoutParams.WRAP_CONTENT)：自适应； 其他固定数值 */
-    protected int widthPixels = -2;
+    protected int width = -2;
     /** 高度 -1：撑满 -2：自适应 其他固定数值 */
-    protected int heightPixels = -2;
-    /** 是否 清理背景变暗 */
-    protected boolean isBgDarkening = false;
-    /** 背景 是否透明 (dialog 边框阴影)*/
-    protected boolean isTransparent = false;
+    protected int height = -2;
+
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     /** 设置dialog 布局 */
-    protected abstract int getContentLayout();
+    protected abstract int initLayoutId();
+
+    /** 渲染数据到View中 */
+    public abstract void convertView(ViewHolder holder, CommonDialog dialog);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.commonDialog);
-        layoutId = getContentLayout();
+        layoutId = initLayoutId();
 
         //恢复保存的数据
-        if (savedInstanceState != null) {
-            widthPixels = savedInstanceState.getInt(WIDTH);
-            heightPixels = savedInstanceState.getInt(HEIGHT);
+        if (null != savedInstanceState) {
+            width = savedInstanceState.getInt(WIDTH);
+            height = savedInstanceState.getInt(HEIGHT);
             dimAmount = savedInstanceState.getFloat(DIM);
             gravity = savedInstanceState.getInt(GRAVITY);
             isHide = savedInstanceState.getBoolean(CANCEL);
             anim = savedInstanceState.getInt(ANIM);
             layoutId = savedInstanceState.getInt(LAYOUT);
-
-            instanceState(savedInstanceState);
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         if (null == mRootView) {
             mRootView = inflater.inflate(layoutId, container, false);
+
+            convertView(ViewHolder.createViewHolder(getContext(), mRootView), this);
         } else {
             ViewGroup parent = (ViewGroup) mRootView.getParent();
             if (null != parent) {
@@ -102,15 +105,9 @@ public abstract class CommonDialog extends DialogFragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        baseInit();
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
-        baseInit();
+        initParams();
 
         setOnKeyListener();
     }
@@ -118,29 +115,25 @@ public abstract class CommonDialog extends DialogFragment {
     /**
      * 初始化 dialog 样式
      */
-    protected void baseInit() {
+    protected void initParams() {
         Window window = getDialog().getWindow();
         if (null != window) {
             // 使用ViewGroup.LayoutParams，以便Dialog 宽度或高度充满整个屏幕
             WindowManager.LayoutParams params = window.getAttributes();
-            if (isTransparent) window.setBackgroundDrawableResource(android.R.color.transparent);//背景透明
-            //调节灰色背景透明度[0-1]，默认0.5f
-            params.dimAmount = dimAmount;
 
-            params.width = widthPixels;
-            params.height = heightPixels;
+            params.width = width > 0 ? DensityUtils.dp2px(getContext(), width) : width;
+            params.height = height > 0 ? DensityUtils.dp2px(getContext(), height) : height;
 
-            window.setGravity(gravity);  //此处可以设置dialog显示的位置
+            params.dimAmount = dimAmount;//调节灰色背景透明度[0-1]，默认0.5f
+
+            window.setGravity(gravity);  //设置dialog显示的位置
             window.setWindowAnimations(anim);  //添加动画
 
             window.setAttributes(params);
-
         }
 
         setCancelable(isHide);
     }
-
-    public void instanceState(Bundle savedInstanceState){}
 
     /**
      * 屏幕旋转等导致DialogFragment销毁后重建时保存数据
@@ -150,14 +143,15 @@ public abstract class CommonDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(WIDTH, widthPixels);
-        outState.putInt(HEIGHT, heightPixels);
+        outState.putInt(WIDTH, width);
+        outState.putInt(HEIGHT, height);
         outState.putFloat(DIM, dimAmount);
         outState.putInt(GRAVITY, gravity);
         outState.putBoolean(CANCEL, isHide);
         outState.putInt(ANIM, anim);
         outState.putInt(LAYOUT, layoutId);
     }
+
 
     /**
      * 设置 dialog显示位置
@@ -187,52 +181,41 @@ public abstract class CommonDialog extends DialogFragment {
     }
 
     /**
-     * 设置背景 是否透明(dialog 边框阴影)
-     * @param transparent
-     */
-    public void setTransparent(boolean transparent) {
-        isTransparent = transparent;
-    }
-
-    /**
      * 设置 宽度值
-     * @param widthPixels
+     * @param width
      */
-    public CommonDialog setWidthPixels(int widthPixels) {
-        this.widthPixels = widthPixels;
+    public CommonDialog setWidthPixels(int width) {
+        this.width = width;
         return this;
     }
 
     /**
      * 设置 高度值
-     * @param heightPixels
+     * @param height
      */
-    public CommonDialog setHeightPixels(int heightPixels) {
-        this.heightPixels = heightPixels;
+    public CommonDialog setHeightPixels(int height) {
+        this.height = height;
         return this;
     }
+
     /**
-     * 设置 是否 清理背景变暗
-     * @param bgDarkening
+     * 设置 灰色背景透明度 ([0-1]，默认0.5f)
+     * @param dimAmount
+     * @return
      */
-    public void setBgDarkening(boolean bgDarkening) {
-        isBgDarkening = bgDarkening;
+    public CommonDialog setDimAmount(float dimAmount) {
+        this.dimAmount = dimAmount;
+        return this;
     }
 
     /**
      * 设置 dialog 关闭监听
      * @param dialogList
      */
-    public CommonDialog setDialogList(DialogDismissListner dialogList) {
+    public CommonDialog setDialogList(PopupDismissListner dialogList) {
         this.dialogList = dialogList;
         return this;
     }
-
-    /** dialog关闭 监听接口 */
-    public interface DialogDismissListner{
-        void onDismiss();
-    }
-
 
     /**
      * 自定义show

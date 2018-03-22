@@ -6,6 +6,8 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.fy.baselibrary.base.ViewHolder;
+
 import java.util.List;
 
 /**

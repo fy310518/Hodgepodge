@@ -1,4 +1,4 @@
-package com.fy.baselibrary.rv.adapter;
+package com.fy.baselibrary.base;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * RecyclerView 通用 ViewHolder
+ * 通用 ViewHolder
  * Created by 下载 on 2017/7/31.
  */
 public class ViewHolder extends RecyclerView.ViewHolder {

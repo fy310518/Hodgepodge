@@ -3,6 +3,8 @@ package com.fy.baselibrary.rv.adapter;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import com.fy.baselibrary.base.ViewHolder;
+
 import java.util.List;
 
 /**

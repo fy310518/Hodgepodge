@@ -2,7 +2,7 @@ package com.fy.baselibrary.retrofit.dialog;
 
 import android.support.v7.app.AppCompatActivity;
 
-import com.fy.baselibrary.base.CommonDialog;
+import com.fy.baselibrary.base.dialog.CommonDialog;
 
 /**
  * 自定义对话框的dialog</p>
