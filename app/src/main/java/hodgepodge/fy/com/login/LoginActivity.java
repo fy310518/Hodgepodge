@@ -65,11 +65,11 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
     public void initData(Activity activity, Bundle savedInstanceState) {
         mContext = this;
 
-        Intent intent = new Intent(this, PermissionActivity.class);
-        intent.putExtra(PermissionActivity.KEY_PERMISSIONS_ARRAY,
+        Bundle bundle = new Bundle();
+        bundle.putStringArray(PermissionActivity.KEY_PERMISSIONS_ARRAY,
                 new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO});
 
-        startActivityForResult(intent, PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE);
+        JumpUtils.jump(this, PermissionActivity.class, bundle, PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE);
     }
 
 
@@ -227,10 +227,10 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
         if (requestCode == PermissionActivity.CALL_BACK_PERMISSION_REQUEST_CODE) {
             switch (resultCode) {
                 case PermissionActivity.CALL_BACK_RESULT_CODE_SUCCESS:
-                    T.showLong("权限申请成功！");
+//                    T.showLong("权限申请成功！");
                     break;
                 case PermissionActivity.CALL_BACK_RESULE_CODE_FAILURE:
-                    T.showLong("权限申请失败！");
+//                    T.showLong("权限申请失败！");
                     break;
             }
         }

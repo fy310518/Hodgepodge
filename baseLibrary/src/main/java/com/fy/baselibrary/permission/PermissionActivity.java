@@ -1,14 +1,11 @@
 package com.fy.baselibrary.permission;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +14,10 @@ import android.view.View;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.application.IBaseActivity;
+import com.fy.baselibrary.base.ViewHolder;
+import com.fy.baselibrary.base.dialog.CommonDialog;
+import com.fy.baselibrary.base.dialog.DialogConvertListener;
+import com.fy.baselibrary.base.dialog.NiceDialog;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.List;
  * https://github.com/KCrason/PermissionGranted
  * Created by github on 2017/8/17.
  */
-public class PermissionActivity extends AppCompatActivity implements IBaseActivity{
+public class PermissionActivity extends AppCompatActivity implements IBaseActivity {
 
     private final static int PERMISSION_REQUEST_CODE = 0x01;
 
@@ -80,25 +81,27 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
     public void initData(Activity activity, Bundle savedInstanceState) {
         mFirstRefuseMessage = getString(R.string.defaule_always_message);
         if (getIntent() != null) {
-            mPermissions = getIntent().getStringArrayExtra(KEY_PERMISSIONS_ARRAY);
+            mPermissions = getIntent().getExtras().getStringArray(KEY_PERMISSIONS_ARRAY);
             mFirstRefuseMessage = getIntent().getStringExtra(KEY_FIRST_MESSAGE);
             mAlwaysRefuseMessage = getIntent().getStringExtra(KEY_ALWAYS_MESSAGE);
         }
+
         if (TextUtils.isEmpty(mFirstRefuseMessage)) {
             mFirstRefuseMessage = getString(R.string.defaule_first_message);
         }
         if (TextUtils.isEmpty(mAlwaysRefuseMessage)) {
             mAlwaysRefuseMessage = getString(R.string.defaule_always_message);
         }
+
         checkPermission(mPermissions);
     }
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+    }
 
     @Override
     public void reTry() {
-
     }
 
     /**
@@ -182,12 +185,21 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
     }
 
     public void showPermissionDialog(final boolean isAlwaysRefuse) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(isAlwaysRefuse ? mAlwaysRefuseMessage : mFirstRefuseMessage).
-                setTitle(getString(R.string.dialog_title)).
-                setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> onCancelPermission())
-                .setPositiveButton(isAlwaysRefuse ? getString(R.string.set) : getString(R.string.ok), (dialogInterface, i) -> onSurePermission(isAlwaysRefuse))
-                .show();
+        NiceDialog.init()
+                .setLayoutId(R.layout.dialog_permission)
+                .setDialogConvertListener(new DialogConvertListener() {
+                    @Override
+                    protected void convertView(ViewHolder holder, CommonDialog dialog) {
+                        holder.setText(R.id.tvPermissionTitle, getString(R.string.dialog_title));
+                        holder.setText(R.id.tvPermissionDescribe, isAlwaysRefuse ? mAlwaysRefuseMessage : mFirstRefuseMessage);
+
+                        holder.setText(R.id.tvpermissionConfirm, isAlwaysRefuse ? getString(R.string.set) : getString(R.string.ok));
+                        holder.setOnClickListener(R.id.tvpermissionConfirm, v -> onSurePermission(isAlwaysRefuse));
+
+                        holder.setText(R.id.tvPermissionCancel, getString(R.string.cancel));
+                        holder.setOnClickListener(R.id.tvPermissionCancel, v -> onCancelPermission());
+                    }
+                }).show(getSupportFragmentManager());
     }
 
     @Override
@@ -200,6 +212,7 @@ public class PermissionActivity extends AppCompatActivity implements IBaseActivi
                     failurePermissionCount.add(grantResults[i]);
                 }
             }
+
             if (failurePermissionCount.size() == 0) {
                 //全部成功
                 notifySuccess();

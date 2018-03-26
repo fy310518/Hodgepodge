@@ -54,7 +54,7 @@ public class IProgressDialog {
     /** 关闭对话框 */
     public void close() {
         if (null != dialog && null != mContext) {
-            dialog.dismiss();
+            dialog.dismiss(false);
         }
     }
 }

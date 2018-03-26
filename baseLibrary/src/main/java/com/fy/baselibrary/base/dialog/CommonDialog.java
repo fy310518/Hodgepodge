@@ -230,8 +230,13 @@ public abstract class CommonDialog extends DialogFragment {
         ft.commitAllowingStateLoss();
     }
 
-    @Override
-    public void dismiss() {
+    /**
+     * 关闭对话框
+     * @param isDismiss 是否拦截关闭对话框 命令
+     */
+    public void dismiss(boolean isDismiss) {
+        if (isDismiss) return;
+
         super.dismiss();
         if (null != dialogList)dialogList.onDismiss();
     }
@@ -243,7 +248,7 @@ public abstract class CommonDialog extends DialogFragment {
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                 L.v("dialog onkey", "按下返回键");
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    dismiss();
+                    dismiss(false);
                     return true;
                 }
                 return false;
