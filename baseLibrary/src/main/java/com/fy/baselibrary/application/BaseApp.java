@@ -3,6 +3,8 @@ package com.fy.baselibrary.application;
 
 import android.app.Application;
 
+import com.fy.baselibrary.utils.NightModeUtils;
+
 /**
  * 基础 application
  * Created by fangs on 2017/5/5.
@@ -18,6 +20,8 @@ public class BaseApp extends Application {
 
 //        设置activity 生命周期回调
         registerActivityLifecycleCallbacks(new BaseActivityLifecycleCallbacks());
+
+        NightModeUtils.setNightMode();
     }
 
     /**

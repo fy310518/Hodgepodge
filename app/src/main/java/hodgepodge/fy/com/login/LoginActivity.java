@@ -78,10 +78,10 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvLogin:
-//                Bundle bundle = new Bundle();
-//                bundle.putString("大王", "大王叫我来巡山");
-//                JumpUtils.jump(mContext, MainActivity.class, bundle);
-                login();
+                Bundle bundle = new Bundle();
+                bundle.putString("大王", "大王叫我来巡山");
+                JumpUtils.jump(mContext, StatusDemoActivity.class, bundle);
+//                login();
 //                getNews();
                 break;
         }

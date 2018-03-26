@@ -43,8 +43,6 @@ public class StatusLayoutManager {
     int netWorkErrorRetryViewId;
     int errorRetryViewId;
     int emptyDataRetryViewId;
-    int loadingLayoutResId;
-    int contentLayoutResId;
 
     final int retryViewId;
 
@@ -73,8 +71,7 @@ public class StatusLayoutManager {
 
     /** 显示内容 */
     public void showContent() {
-        if(layoutSparseArray.get(LAYOUT_CONTENT_ID) != null)
-            showHideViewById(LAYOUT_CONTENT_ID);
+        showHideViewById(LAYOUT_CONTENT_ID);
     }
 
     /** 显示空数据 */
@@ -96,7 +93,7 @@ public class StatusLayoutManager {
     }
 
     /**
-     *  根据ID 显示或隐藏布局
+     * 根据ID 显示或隐藏布局
      * @param id
      */
     private void showHideViewById(int id) {

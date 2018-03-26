@@ -9,10 +9,12 @@ import android.widget.TextView;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
+import com.fy.baselibrary.utils.NightModeUtils;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import hodgepodge.fy.com.R;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -44,27 +46,32 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
     @Override
     public void setStatusBar(Activity activity) {
-        MdStatusBar.setColorBar(activity, R.color.blue, R.color.blue);
+        MdStatusBar.setColorBar(activity, R.color.statusBar, R.color.statusBar);
     }
 
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
         initSLManager();
-
-        Observable.timer(3000, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        slManager.showError();
-                    }
-                });
     }
 
+    @OnClick({R.id.tvKing})
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tvKing:
+                NightModeUtils.switchNightMode(this);
 
+//                Observable.timer(3000, TimeUnit.MILLISECONDS)
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(new Consumer<Long>() {
+//                            @Override
+//                            public void accept(Long aLong) throws Exception {
+//                                slManager.showContent();
+//                            }
+//                        });
+                break;
+        }
     }
 
     @Override
@@ -108,7 +115,7 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                 .netWorkErrorView(R.layout.state_include_networkerror)
                 .emptyDataView(R.layout.state_include_emptydata)
                 .retryViewId(R.id.tvTry)
-                .onRetryListener(() -> reTry())
+                .onRetryListener(this::reTry)
                 .build();
 
         slManager.showContent();

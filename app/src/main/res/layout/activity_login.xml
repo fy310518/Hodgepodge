@@ -17,7 +17,7 @@
         android:background="@mipmap/btn_bg"
         android:gravity="center"
         android:text="@string/login"
-        android:textColor="@color/login" />
+        android:textColor="@color/txtLight" />
 
     <android.support.constraint.Guideline
         android:id="@+id/bottomLine1"
