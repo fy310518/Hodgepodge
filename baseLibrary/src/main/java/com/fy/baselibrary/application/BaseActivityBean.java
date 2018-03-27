@@ -1,5 +1,7 @@
 package com.fy.baselibrary.application;
 
+import com.fy.baselibrary.statuslayout.StatusLayoutManager;
+
 import java.io.Serializable;
 
 import butterknife.Unbinder;
@@ -32,4 +34,14 @@ public class BaseActivityBean implements Serializable {
         this.orientoinListener = orientoinListener;
     }
 
+
+    StatusLayoutManager slManager;
+
+    public StatusLayoutManager getSlManager() {
+        return slManager;
+    }
+
+    public void setSlManager(StatusLayoutManager slManager) {
+        this.slManager = slManager;
+    }
 }

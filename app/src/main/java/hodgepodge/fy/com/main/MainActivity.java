@@ -267,31 +267,17 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity {
 
     @OnClick({R.id.loadImg})
     @Override
-    public void onClick(View v) {
-
-    }
+    public void onClick(View v) {}
 
     @Override
-    public void reTry() {
+    public void reTry() {}
 
-    }
-
-    //保存点击的时间
-    private long exitTime = 0;
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            //处理 退出界面
-            if ((System.currentTimeMillis() - exitTime) > 2000) {
-
-                T.showLong(com.fy.baselibrary.R.string.exit_app);
-                exitTime = System.currentTimeMillis();
-            } else {
-                JumpUtils.exitApp(mContext, StartActivity.class);
-            }
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
+    public void onBackPressed() {
+        // super.onBackPressed(); 	不要调用父类的方法
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 }

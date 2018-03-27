@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.LinearLayout;
 
+import java.io.Serializable;
+
 /**
  * 多状态视图 管理类
  * Created by fangs on 2016/12/15.
  */
-public class StatusLayoutManager {
+public class StatusLayoutManager implements Serializable{
 
     /** 内容id */
     public static final int LAYOUT_CONTENT_ID = 0;

@@ -88,9 +88,7 @@ public class LoginActivity extends AppCompatActivity implements IBaseActivity {
     }
 
     @Override
-    public void reTry() {
-
-    }
+    public void reTry() {}
 
     private void login(){
         IProgressDialog progressDialog = new IProgressDialog().init(mContext)

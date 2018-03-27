@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
+
 /**
  * 辅助 多状态布局 类
  */
-public class TargetContext {
+public class TargetContext implements Serializable{
     private Context context;
     private ViewGroup parentView;
     private View oldContent;

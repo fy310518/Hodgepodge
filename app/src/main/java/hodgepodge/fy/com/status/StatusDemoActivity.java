@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.fy.baselibrary.application.BaseActivityBean;
 import com.fy.baselibrary.application.IBaseActivity;
 import com.fy.baselibrary.statusbar.MdStatusBar;
 import com.fy.baselibrary.statuslayout.StatusLayoutManager;
@@ -51,7 +52,9 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
 
     @Override
     public void initData(Activity activity, Bundle savedInstanceState) {
-        initSLManager();
+        BaseActivityBean activityBean = (BaseActivityBean) activity.getIntent()
+                .getSerializableExtra("ActivityBean");
+        slManager = activityBean.getSlManager();
     }
 
     @OnClick({R.id.tvKing})
@@ -59,17 +62,17 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvKing:
-                NightModeUtils.switchNightMode(this);
-
-//                Observable.timer(3000, TimeUnit.MILLISECONDS)
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Consumer<Long>() {
-//                            @Override
-//                            public void accept(Long aLong) throws Exception {
-//                                slManager.showContent();
-//                            }
-//                        });
+//                NightModeUtils.switchNightMode(this);
+                slManager.showNetWorkError();
+                Observable.timer(3000, TimeUnit.MILLISECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<Long>() {
+                            @Override
+                            public void accept(Long aLong) throws Exception {
+                                slManager.showError();
+                            }
+                        });
                 break;
         }
     }
@@ -103,21 +106,5 @@ public class StatusDemoActivity extends AppCompatActivity implements IBaseActivi
                         slManager.showContent();
                     }
                 });
-    }
-
-    /**
-     * 设置 多状态视图 管理器
-     */
-    protected void initSLManager() {
-        slManager = StatusLayoutManager.newBuilder(this, this)
-                .setShowHeadView(isShowHeadView())
-                .errorView(R.layout.state_include_error)
-                .netWorkErrorView(R.layout.state_include_networkerror)
-                .emptyDataView(R.layout.state_include_emptydata)
-                .retryViewId(R.id.tvTry)
-                .onRetryListener(this::reTry)
-                .build();
-
-        slManager.showContent();
     }
 }

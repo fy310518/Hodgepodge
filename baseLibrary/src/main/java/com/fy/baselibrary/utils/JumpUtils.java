@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-
-import com.fy.baselibrary.R;
 
 import java.io.File;
 
@@ -17,6 +14,11 @@ import java.io.File;
  * Created by fangs on 2017/5/9.
  */
 public class JumpUtils {
+
+    private JumpUtils() {
+        /* cannot be instantiated */
+        throw new UnsupportedOperationException("cannot be instantiated");
+    }
 
     /**
      * 跳转到指定 Action 的activity
@@ -32,7 +34,6 @@ public class JumpUtils {
 
         intent.setAction(action);
         act.startActivity(intent);
-        act.overridePendingTransition(R.anim.anim_slide_left_in, R.anim.anim_slide_left_out);
     }
 
     /**
@@ -50,7 +51,7 @@ public class JumpUtils {
         intent.setAction(action);
         act.startActivityForResult(intent, requestCode);
         //第一个参数 下一界面进入效果；第二个参数 当前界面退出效果
-        act.overridePendingTransition(R.anim.anim_slide_left_in, R.anim.anim_slide_left_out);
+//        act.overridePendingTransition(R.anim.anim_slide_left_in, R.anim.anim_slide_left_out);
     }
 
     /**
@@ -66,7 +67,6 @@ public class JumpUtils {
         }
 
         act.startActivity(intent);
-        act.overridePendingTransition(R.anim.anim_slide_left_in, R.anim.anim_slide_left_out);
     }
 
     /**
@@ -83,8 +83,6 @@ public class JumpUtils {
         }
 
         act.startActivityForResult(intent, requestCode);
-        //第一个参数 下一界面进入效果；第二个参数 当前界面退出效果
-        act.overridePendingTransition(R.anim.anim_slide_left_in, R.anim.anim_slide_left_out);
     }
 
     /**
@@ -129,7 +127,6 @@ public class JumpUtils {
         }
         act.setResult(Activity.RESULT_OK, intent);
         act.finish();
-        act.overridePendingTransition(R.anim.anim_slide_right_in, R.anim.anim_slide_right_out);
     }
 
     /**
@@ -137,7 +134,6 @@ public class JumpUtils {
      */
     public static void exitActivity(AppCompatActivity act) {
         act.finish();
-        act.overridePendingTransition(R.anim.anim_slide_right_in, R.anim.anim_slide_right_out);
     }
 
     /**

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.fy.baselibrary.R;
 import com.fy.baselibrary.retrofit.RequestUtils;
+import com.fy.baselibrary.statuslayout.StatusLayoutManager;
 import com.fy.baselibrary.utils.JumpUtils;
 import com.fy.baselibrary.utils.L;
 
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
 
 /**
  * activity 生命周期回调 (api 14+)
- * 注意：使用本框架activity 与 activity 之间传递数据 统一使用 Bundle
+ * 注意：使用本框架 activity 与 activity 之间传递数据 统一使用 Bundle
  * Created by fangs on 2017/5/18.
  */
 public class BaseActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
@@ -54,6 +55,9 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -1);
 
                 linearLRoot.addView(view, params);
+
+                StatusLayoutManager slManager = initSLManager(activity);
+                if (null != slManager) activityBean.setSlManager(slManager);
             }
 
             act.setStatusBar(activity);
@@ -152,4 +156,28 @@ public class BaseActivityLifecycleCallbacks implements Application.ActivityLifec
             JumpUtils.exitActivity((AppCompatActivity) activity));
     }
 
+
+    /**
+     * 设置 多状态视图 管理器
+     */
+    protected StatusLayoutManager initSLManager(Activity activity) {
+        StatusLayoutManager slManager = null;
+
+        if (activity instanceof IBaseActivity) {
+            IBaseActivity act = (IBaseActivity) activity;
+
+            slManager = StatusLayoutManager.newBuilder(activity, activity)
+                    .setShowHeadView(act.isShowHeadView())
+                    .errorView(R.layout.state_include_error)
+                    .netWorkErrorView(R.layout.state_include_networkerror)
+                    .emptyDataView(R.layout.state_include_emptydata)
+                    .retryViewId(R.id.tvTry)
+                    .onRetryListener(act::reTry)
+                    .build();
+
+            slManager.showContent();
+        }
+
+        return slManager;
+    }
 }
