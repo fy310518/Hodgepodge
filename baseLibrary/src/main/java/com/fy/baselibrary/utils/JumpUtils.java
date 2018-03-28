@@ -184,4 +184,7 @@ public class JumpUtils {
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         act.startActivity(intent);
     }
+
+
+
 }

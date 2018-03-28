@@ -2,8 +2,11 @@ package com.fy.baselibrary.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import com.fy.baselibrary.application.BaseApp;
+
+import java.util.Map;
 
 /**
  * SharedPreferences 管理工具类
@@ -99,4 +102,62 @@ public class SpfUtils {
         return getSpf().getBoolean(key, false);
     }
 
+
+    /**
+     * 获取所有键值对
+     * @return
+     */
+    public Map<String, ?> getAll() {
+        return getSpf().getAll();
+    }
+
+    /**
+     * Return whether the sp contains the preference.
+     *
+     * @param key The key of sp.
+     * @return {@code true}: yes<br>{@code false}: no
+     */
+    public boolean contains(@NonNull final String key) {
+        return getSpf().contains(key);
+    }
+
+    /**
+     * 删除已存内容
+     * @param key The key of sp.
+     */
+    public static void remove(@NonNull final String key) {
+        remove(key, false);
+    }
+
+    /**
+     * Remove the preference in sp.
+     * @param key      The key of sp.
+     * @param isCommit True to use {@link SharedPreferences.Editor#commit()},
+     *                 false to use {@link SharedPreferences.Editor#apply()}
+     */
+    public static void remove(@NonNull final String key, final boolean isCommit) {
+        if (isCommit) {
+            getSpf().edit().remove(key).commit();
+        } else {
+            getSpf().edit().remove(key).apply();
+        }
+    }
+
+    /** 清除所有数据 */
+    public static void clear() {
+        clear(false);
+    }
+
+    /**
+     * 清除所有数据
+     * @param isCommit True to use {@link SharedPreferences.Editor#commit()},
+     *                 false to use {@link SharedPreferences.Editor#apply()}
+     */
+    public static void clear(final boolean isCommit) {
+        if (isCommit) {
+            getSpf().edit().clear().commit();
+        } else {
+            getSpf().edit().clear().apply();
+        }
+    }
 }

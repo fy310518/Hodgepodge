@@ -18,6 +18,11 @@ public class EncryptUtils {
 
 	final static String AES_KEY = "VoSkEFQayXJT47VW";
 
+	private EncryptUtils() {
+        /* cannot be instantiated */
+		throw new UnsupportedOperationException("cannot be instantiated");
+	}
+
 	/**
 	 * AES 加密
 	 * @param str 待加密字符串
@@ -92,4 +97,6 @@ public class EncryptUtils {
 			return null;
 		}
 	}
+
+
 }

@@ -59,4 +59,13 @@ public class ResourceUtils {
         return String.format(format, args);
     }
 
+
+    /**
+     * 得到raw目录下某个文件内容
+     * @param resId raw 资源ID
+     * (一般是 MP3和 Ogg等文件，在raw(raw是Resources 的子目录)文件内的资源会原封不动的拷贝到APK中，
+     *              而不会像其它资源文件那样被编译成二进制的形式)
+     * @return
+     */
+
 }

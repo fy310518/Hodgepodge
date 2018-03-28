@@ -1,9 +1,15 @@
 package com.fy.baselibrary.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
+
+import com.fy.baselibrary.application.BaseApp;
+
+import java.io.File;
 
 /**
  * 获取设备信息 工具类
@@ -32,7 +38,14 @@ public class DeviceUtils {
      * @return 手机型号
      */
     public static String getSystemModel() {
-        return Build.MODEL;
+        String model = Build.MODEL;
+
+        if (model != null) {
+            model = model.trim().replaceAll("\\s*", "");
+        } else {
+            model = "";
+        }
+        return model;
     }
 
     /**
@@ -45,10 +58,22 @@ public class DeviceUtils {
     }
 
     /**
+     * 获取设备 Android ID
+     * @return the android id of device
+     */
+    @SuppressLint("HardwareIds")
+    public static String getAndroidID() {
+        Context context = BaseApp.getAppCtx();
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+
+    /**
      * 获取手机IMEI(需要“android.permission.READ_PHONE_STATE”权限)
      *
      * @return 手机IMEI
      */
+    @SuppressLint({"MissingPermission", "HardwareIds"})
     public static String getIMEI(Context ctx) {
         TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Activity.TELEPHONY_SERVICE);
         if (tm != null) {
@@ -70,5 +95,21 @@ public class DeviceUtils {
         System.out.println("---> maxMemory="+maxMemory+"M,totalMemory="+totalMemory+"M,freeMemory="+freeMemory+"M");
 
         L.e("maxMemory" + maxMemory + "totalMemory" + totalMemory + "freeMemory" + freeMemory);
+    }
+
+    /**
+     * 判断设备是否 rooted.
+     * @return {@code true}: yes<br>{@code false}: no
+     */
+    public static boolean isDeviceRooted() {
+        String su = "su";
+        String[] locations = {"/system/bin/", "/system/xbin/", "/sbin/", "/system/sd/xbin/",
+                "/system/bin/failsafe/", "/data/local/xbin/", "/data/local/bin/", "/data/local/"};
+        for (String location : locations) {
+            if (new File(location + su).exists()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
